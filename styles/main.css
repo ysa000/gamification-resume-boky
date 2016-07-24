@@ -1,9 +1,11 @@
-
+body {
+	background: #334;
+}
 #frame {
-	width: 185px;
-	height: 127px;
-	background: url('../images/boky/small/jumping/sprite.png') no-repeat left top;
-	animation: animation-mouvement 1s steps(32) infinite;
+	width: 370px;
+	height: 254px;
+	background: url('../images/boky/attackingintheair/sprite.png') no-repeat left top;
+	animation: animation-mouvement 0.5s steps(16) infinite;
 }
 
 @keyframes animation-mouvement {
