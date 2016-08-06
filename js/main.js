@@ -1,15 +1,17 @@
-// ========== Width et Height du canvas ==========
-
-var canvas = document.getElementById('canvas');
-var context = canvas.getContext('2d');
-var looping = false;
-var totalSeconds = 0;
-canvas.width = 1140;
-canvas.height = 570;
-
 // ========== Anim Background Image du canvas ==========
 
 (function() {
+	// ========== Config ==========
+	var backgroundMotion = 100; // the background scrolls with a speed of 100 pixels/sec
+
+	// ========== Width et Height du canvas ==========
+	var canvas = document.getElementById('canvas');
+	var context = canvas.getContext('2d');
+	var looping = false;
+	var totalSeconds = 0;
+	canvas.width = 1140;
+	canvas.height = 570;
+	// =================================================
     window.requestAnimationFrame = window.requestAnimationFrame
             || window.webkitRequestAnimationFrame
             || window.mozRequestAnimationFrame
@@ -51,11 +53,9 @@ canvas.height = 570;
     }
 
     function draw(delta) {
-        /* Here happens some magic. */
         totalSeconds += delta;
-         var vx = 100; // the background scrolls with a speed of 100 pixels/sec
          var numImages = Math.ceil(canvas.width / img.width) + 1;
-         var xpos = totalSeconds * vx % img.width;
+         var xpos = totalSeconds * backgroundMotion % img.width;
 
          context.save();
          context.translate(-xpos, 0);
@@ -65,11 +65,3 @@ canvas.height = 570;
          context.restore();
     }
 }());
-
-// ========== Ajour Boky dans le canvas
-
-var boky = new Image();
-boky.onload = function() {
-	context.drawImage(boky, 185, 127)
-};
-boky.src = './images/boky-small/boky-attacking_in_the_air.png';
