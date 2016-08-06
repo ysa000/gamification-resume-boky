@@ -4,8 +4,8 @@ var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 var looping = false;
 var totalSeconds = 0;
-canvas.width = 1024;
-canvas.height = 600;
+canvas.width = 1140;
+canvas.height = 570;
 
 // ========== Anim Background Image du canvas ==========
 
@@ -17,7 +17,7 @@ canvas.height = 600;
 
     var img = new Image();
     img.onload = imageLoaded;
-    img.src = './images/background/resized-space-full-bg.png';
+    img.src = './images/background/resized-mountain-full-bg.jpg';
 
     function imageLoaded() {
         draw(0);
@@ -65,3 +65,11 @@ canvas.height = 600;
          context.restore();
     }
 }());
+
+// ========== Ajour Boky dans le canvas
+
+var boky = new Image();
+boky.onload = function() {
+	context.drawImage(boky, 185, 127)
+};
+boky.src = './images/boky-small/boky-attacking_in_the_air.png';

@@ -1,14 +1,21 @@
 body {
 	background: #334;
 }
+#canvasWrap {
+	position: relative;
+}
+
 #frame {
-	width: 370px;
-	height: 254px;
-	background: url('../images/boky/jumping/sprite.png') no-repeat left top;
-	animation: animation-mouvement 0.5s steps(32) infinite;
+	width: 185px;
+	height: 127px;
+	background: url('../images/boky-small/boky-attacking_in_the_air.png') no-repeat left top;
+	animation: animation-mouvement 0.5s steps(16) infinite;
+	position: absolute;
+	top: 20px;
+	left: 30px;
 }
 
 @keyframes animation-mouvement {
 	0% {background-position: 0px 0px; }
-	100% {background-position: 0px -8128px; }
+	100% {background-position: 0px -2032px; }
 }
