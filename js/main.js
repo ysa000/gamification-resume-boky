@@ -7,14 +7,14 @@
     var bokyStartTop = 150;
     var bokyStartLeft = 30;
 
-	// ========== Width & Height du canvas ==========
-	var canvas = document.getElementById('canvas');
-	var context = canvas.getContext('2d');
-	var looping = false;
-	var totalSeconds = 0;
-	canvas.width = 1140;
-	canvas.height = 570;
-	// -------------------------------------------------------------------------
+    // ========== Width & Height du canvas ==========
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var looping = false;
+    var totalSeconds = 0;
+    canvas.width = 1140;
+    canvas.height = 570;
+    // -------------------------------------------------------------------------
     window.requestAnimationFrame = window.requestAnimationFrame
             || window.webkitRequestAnimationFrame
             || window.mozRequestAnimationFrame
@@ -69,17 +69,21 @@
     }
 
 // ----------------------------------------------------------------------
-	// ========== Movements Boky ==========
+    // ========== Movements Boky ==========
 
+    var FPS = 60;
+    var movingInterval = -1;
     var boky = document.getElementById('frame');
 
     function initBoky() {
     boky.style.top = bokyStartTop + 'px';
     boky.style.left = bokyStartLeft + 'px';
-}
+    }
 
     document.onkeydown = movementsBoky;
+
     function movementsBoky(event) {
+        var direction;
 
         var moveUp = function(element, step) {
             var top = element.style.top;
@@ -104,26 +108,52 @@
         switch(event.keyCode) {
 
             case 38: // Up arrow key
-                moveUp(boky, stepBoky);
+                direction = 'up';
                 break;
 
             case 40: // Down arrow key
-                moveDown(boky, stepBoky);
+                direction = 'down';
                 break;
 
             case 37: // Left arrow key
-                moveLeft(boky, stepBoky);
+                direction = 'left';
                 break;
 
             case 39: // Right arrow key
-                moveRight(boky, stepBoky)
+                direction = 'right';
                 break;
 
             default:
 
         }
+
+        startMoving();
+
+        function startMoving() {
+            if(movingInterval === -1) {
+                // direction
+                var directionFunction;
+                //
+                if (direction === 'up') {
+                    directionFunction = moveUp;
+                } else if (direction === 'down') {
+                    directionFunction = moveDown;
+                } else if (direction === 'left') {
+                    directionFunction = moveLeft;
+                } else if (direction === 'right') {
+                    directionFunction = moveRight;
+                }
+
+                movingInterval = setInterval(directionFunction, 1000 / FPS, boky, stepBoky);
+            }
+        }
+
     }
 
+    document.onkeyup = function stopMoving() {
+        clearInterval(movingInterval);
+        movingInterval = -1;
+    }
     initBoky();
 
 }());
