@@ -3,7 +3,7 @@
 (function() {
 	// ========== Config ==========
 	var backgroundMotion = 300; // Vitesse du background 100pixels/sec
-    var stepBoky = 15;
+    var stepBoky = 5;
     var bokyStartTop = 150;
     var bokyStartLeft = 30;
 
