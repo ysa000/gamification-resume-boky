@@ -1,8 +1,16 @@
 body {
 	background: #334;
 }
-#canvasWrap {
+#canvasWrapper {
 	position: relative;
+	width: 1140px;
+	margin-left: 235px;
+	margin-top: 50px;
+}
+
+#btnStart {
+	display: block;
+	margin: auto;
 }
 
 #frame {

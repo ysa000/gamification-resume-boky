@@ -2,10 +2,10 @@
 
 (function() {
 	// ========== Config ==========
-	var backgroundMotion = 300; // Vitesse du background 100pixels/sec
-    var stepBoky = 5;
-    var bokyStartTop = 150;
-    var bokyStartLeft = 30;
+	var backgroundMotion = 300; // Vitesse du background 300px/sec
+    var stepBoky = 5; // Mouvement 5px
+    var bokyStartTop = 200; // Position x de départ
+    var bokyStartLeft = -10; // Position y de départ
 
     // ========== Width & Height du canvas ==========
     var canvas = document.getElementById('canvas');
@@ -76,8 +76,8 @@
     var boky = document.getElementById('frame');
 
     function initBoky() {
-    boky.style.top = bokyStartTop + 'px';
-    boky.style.left = bokyStartLeft + 'px';
+        boky.style.top = bokyStartTop + 'px';
+        boky.style.left = bokyStartLeft + 'px';
     }
 
     document.onkeydown = movementsBoky;
@@ -93,6 +93,7 @@
         var moveDown = function(element, step) {
             var top = element.style.top;
             element.style.top = parseFloat(top) + step + 'px';
+            //if (element === )
         }
 
         var moveRight = function(element, step) {
