@@ -4,10 +4,19 @@
     function Game(canvas) {
 
     	// ========== Config ==========
-    	var backgroundMotion = 300; // Vitesse du background 300px/sec
-        var stepBoky = 5; // Mouvement 5px
-        var bokyStartTop = 200; // Position x de départ
-        var bokyStartLeft = -10; // Position y de départ
+        var background = {
+            src: './images/background/resized-space-full-bg.jpg',
+            motion: 300
+        }
+        var boky = {
+            src: './images/sprite/boky-sprite.png',
+            width: 185,
+            height: 127,
+            frame: 0,
+            attacking: {
+                numberOfFrames: 16
+            }
+        }
 
         // ========== Width & Height du canvas ==========
         var context = canvas.getContext('2d');
@@ -18,7 +27,6 @@
         var looping = false;
         var totalSeconds = 0;
         var lastFrameTime = 0;
-        var backgroundImg;
 
         // =========== Request Animation Frame ===========
         window.requestAnimationFrame = window.requestAnimationFrame
@@ -27,11 +35,24 @@
                 || function(callback) { window.setTimeout(callback, 1000 / 60); };
 
         function loadGame() {
-            backgroundImg = new Image();
-            backgroundImg.onload = function() {
+            loadBackground();
+            loadBoky();
+        }
+
+        function loadBackground () {
+            background.image = new Image();
+            background.image.onload = function() {
                 loopBackground(0)
             };
-            backgroundImg.src = './images/background/resized-space-full-bg.jpg';
+            background.image.src = background.src;
+        }
+
+        function loadBoky() {
+            boky.image = new Image();
+            boky.image.onload = function() {
+                loopBoky(0);
+            };
+            boky.image.src = boky.src;
         }
 
         function start() {
@@ -52,22 +73,27 @@
             requestAnimationFrame(loop);
 
             var now = Date.now();
-            var deltaSeconds = (now - lastFrameTime) / 1000;
+            totalSeconds += (now - lastFrameTime) / 1000;
             lastFrameTime = now;
-            loopBackground(deltaSeconds);
+            loopBackground();
+            loopBoky();
         }
 
-        function loopBackground(delta) {
-            totalSeconds += delta;
-             var numImages = Math.ceil(canvas.width / backgroundImg.width) + 1;
-             var xpos = totalSeconds * backgroundMotion % backgroundImg.width;
+        function loopBackground() {
+             var numImages = Math.ceil(canvas.width / background.image.width) + 1;
+             var xpos = totalSeconds * background.motion % background.image.width;
 
              context.save();
              context.translate(-xpos, 0);
              for (var i = 0; i < numImages; i++) {
-                 context.drawImage(backgroundImg, i * backgroundImg.width, 0);
+                 context.drawImage(background.image, i * background.image.width, 0);
              }
              context.restore();
+        }
+
+        function loopBoky() {
+            context.drawImage(boky.image, boky.frame * boky.width, 0, boky.width, boky.height, 0, 0, boky.width, boky.height);
+            boky.frame = (boky.frame + 1) % boky.attacking.numberOfFrames;
         }
 
         return {
