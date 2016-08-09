@@ -1,76 +1,97 @@
 // ========== Anim Background Image du canvas ==========
 
 (function() {
-	// ========== Config ==========
-	var backgroundMotion = 300; // Vitesse du background 300px/sec
-    var stepBoky = 5; // Mouvement 5px
-    var bokyStartTop = 200; // Position x de départ
-    var bokyStartLeft = -10; // Position y de départ
+    function Game(canvas) {
 
-    // ========== Width & Height du canvas ==========
-    var canvas = document.getElementById('canvas');
-    var context = canvas.getContext('2d');
-    var looping = false;
-    var totalSeconds = 0;
-    canvas.width = 1140;
-    canvas.height = 570;
-    // -------------------------------------------------------------------------
-    window.requestAnimationFrame = window.requestAnimationFrame
-            || window.webkitRequestAnimationFrame
-            || window.mozRequestAnimationFrame
-            || function(callback) { window.setTimeout(callback, 1000 / 60); };
+    	// ========== Config ==========
+    	var backgroundMotion = 300; // Vitesse du background 300px/sec
+        var stepBoky = 5; // Mouvement 5px
+        var bokyStartTop = 200; // Position x de départ
+        var bokyStartLeft = -10; // Position y de départ
 
-    var img = new Image();
-    img.onload = imageLoaded;
-    img.src = './images/background/resized-space-full-bg.jpg';
+        // ========== Width & Height du canvas ==========
+        var context = canvas.getContext('2d');
+        canvas.width = 1140;
+        canvas.height = 570;
 
-    function imageLoaded() {
-        draw(0);
-        var btn = document.getElementById('btnStart');
-        btn.addEventListener('click', function() {
-            startStop();
-        });
-    }
+        // ========== Variables d'animation du canvas ====
+        var looping = false;
+        var totalSeconds = 0;
+        var lastFrameTime = 0;
+        var backgroundImg;
 
-    var lastFrameTime = 0;
+        // =========== Request Animation Frame ===========
+        window.requestAnimationFrame = window.requestAnimationFrame
+                || window.webkitRequestAnimationFrame
+                || window.mozRequestAnimationFrame
+                || function(callback) { window.setTimeout(callback, 1000 / 60); };
 
-    function startStop() {
-        looping = !looping;
-        if (looping) {
+        function loadGame() {
+            backgroundImg = new Image();
+            backgroundImg.onload = function() {
+                loopBackground(0)
+            };
+            backgroundImg.src = './images/background/resized-space-full-bg.jpg';
+        }
+
+        function start() {
+            looping = true;
             lastFrameTime = Date.now();
             requestAnimationFrame(loop);
         }
-    }
 
-    function loop() {
-        if (!looping) {
-            return;
+        function stop() {
+            looping = false;
         }
 
-        requestAnimationFrame(loop);
+        function loop() {
+            if (!looping) {
+                return;
+            }
 
-        var now = Date.now();
-        var deltaSeconds = (now - lastFrameTime) / 1000;
-        lastFrameTime = now;
-        draw(deltaSeconds);
+            requestAnimationFrame(loop);
+
+            var now = Date.now();
+            var deltaSeconds = (now - lastFrameTime) / 1000;
+            lastFrameTime = now;
+            loopBackground(deltaSeconds);
+        }
+
+        function loopBackground(delta) {
+            totalSeconds += delta;
+             var numImages = Math.ceil(canvas.width / backgroundImg.width) + 1;
+             var xpos = totalSeconds * backgroundMotion % backgroundImg.width;
+
+             context.save();
+             context.translate(-xpos, 0);
+             for (var i = 0; i < numImages; i++) {
+                 context.drawImage(backgroundImg, i * backgroundImg.width, 0);
+             }
+             context.restore();
+        }
+
+        return {
+            start: start,
+            stop: stop,
+            load: loadGame
+        }
     }
 
-    function draw(delta) {
-        totalSeconds += delta;
-         var numImages = Math.ceil(canvas.width / img.width) + 1;
-         var xpos = totalSeconds * backgroundMotion % img.width;
+    var canvas = document.getElementById('canvas');
+    var bokyGame = Game(canvas);
+    bokyGame.load();
 
-         context.save();
-         context.translate(-xpos, 0);
-         for (var i = 0; i < numImages; i++) {
-             context.drawImage(img, i * img.width, 0);
-         }
-         context.restore();
-    }
+    document.getElementById('btnStart').addEventListener('click', function() {
+        bokyGame.start();
+    });
+
+    document.getElementById('btnStop').addEventListener('click', function() {
+        bokyGame.stop();
+    });
 
 // ----------------------------------------------------------------------
     // ========== Movements Boky ==========
-
+/*
     var FPS = 60;
     var movingInterval = -1;
     var boky = document.getElementById('frame');
@@ -156,5 +177,5 @@
         movingInterval = -1;
     }
     initBoky();
-
+*/
 }());
