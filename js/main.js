@@ -56,6 +56,7 @@
         }
 
         function start() {
+            if(looping) return;
             looping = true;
             lastFrameTime = Date.now();
             requestAnimationFrame(loop);
