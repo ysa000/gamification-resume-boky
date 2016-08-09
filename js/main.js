@@ -13,6 +13,9 @@
             width: 185,
             height: 127,
             frame: 0,
+            x: 0,
+            y: 0,
+            step: 15,
             attacking: {
                 numberOfFrames: 16
             }
@@ -37,6 +40,7 @@
         function loadGame() {
             loadBackground();
             loadBoky();
+            loadControls();
         }
 
         function loadBackground () {
@@ -53,6 +57,35 @@
                 loopBoky(0);
             };
             boky.image.src = boky.src;
+        }
+
+        function loadControls() {
+            document.onkeydown = function(event) {
+
+                switch(event.keyCode) {
+
+                    case 38: // Up
+                        moveBokyUp();
+                        break;
+
+                    case 40: // Down
+                        moveBokyDown();
+                        break;
+
+                }
+            }
+            function moveBokyUp() {
+                if (boky.y >= boky.step) {
+                    boky.y -= boky.step;
+                }
+            }
+
+            function moveBokyDown() {
+                if (boky.y <= (canvas.height - boky.height - boky.step)) {
+                    boky.y += boky.step;
+                }
+            }
+
         }
 
         function start() {
@@ -93,7 +126,7 @@
         }
 
         function loopBoky() {
-            context.drawImage(boky.image, boky.frame * boky.width, 0, boky.width, boky.height, 0, 0, boky.width, boky.height);
+            context.drawImage(boky.image, boky.frame * boky.width, 0, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
             boky.frame = (boky.frame + 1) % boky.attacking.numberOfFrames;
         }
 
@@ -107,6 +140,8 @@
     var canvas = document.getElementById('canvas');
     var bokyGame = Game(canvas);
     bokyGame.load();
+    setTimeout(bokyGame.start, 1000);
+
 
     document.getElementById('btnStart').addEventListener('click', function() {
         bokyGame.start();
