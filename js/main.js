@@ -107,6 +107,14 @@
                         moveBokyDown();
                         break;
 
+                    case 37:
+                        moveBokyLeft();
+                        break;
+
+                    case 39:
+                        moveBokyRight();
+                        break;
+
                 }
             }
             function moveBokyUp() {
@@ -118,6 +126,18 @@
             function moveBokyDown() {
                 if (boky.y <= (canvas.height - boky.height - boky.step)) {
                     boky.y += boky.step;
+                }
+            }
+
+            function moveBokyLeft() {
+                if (boky.x >= boky.step) {
+                    boky.x -= boky.step;
+                }
+            }
+
+            function moveBokyRight() {
+                if (boky.x <= canvas.width - boky.width) {
+                    boky.x += boky.step;
                 }
             }
 
@@ -153,6 +173,19 @@
                 loopVillain(0);
             };
             villain.image.src = villain.src;
+        }
+
+        function detectCollide() {
+            if (boky.x < villain.x + villain.width &&
+                boky.x + boky.width > villain.x &&
+                boky.y < villain.y + villain.height &&
+                boky.height + boky.y > villain.y) {
+                // Collision détectée
+                console.log('Tu m\'as eu !');
+            } else {
+                // Pas de collision détectée
+                console.log('Tu m\'as ratée !')
+            }
         }
 
         function loadGameTheme() {
@@ -237,12 +270,12 @@
 
     document.getElementById('btnStart').addEventListener('click', function() {
         bokyGame.start();
-        gameTheme.audio.play();
+        // gameTheme.audio.play();
     });
 
     document.getElementById('btnStop').addEventListener('click', function() {
         bokyGame.stop();
-        gameTheme.audio.stop();
+        // gameTheme.audio.stop();
     });
 
 // ----------------------------------------------------------------------
