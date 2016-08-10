@@ -21,6 +21,20 @@
             }
         }
 
+        var cody = {
+            src: './images/sprite/cody-sprite.png',
+            width: 122,
+            height: 96,
+            frame: 0,
+            x: 200,
+            y: 200,
+            flyingUp: true,
+            step: 8,
+            flying: {
+                numberOfFrames: 4
+            }
+        }
+
         // ========== Width & Height du canvas ==========
         var context = canvas.getContext('2d');
         canvas.width = 1140;
@@ -41,6 +55,7 @@
             loadBackground();
             loadBoky();
             loadControls();
+            loadCody();
         }
 
         function loadBackground () {
@@ -88,6 +103,30 @@
 
         }
 
+        function loadCody() {
+            cody.image = new Image();
+            cody.image.onload = function() {
+                loopCody(0);
+            };
+            cody.image.src = cody.src;
+        }
+
+        function codyFlyingUpAndDown() {
+            if (cody.flyingUp && cody.y >= 0) {
+                cody.y -= cody.step;
+                if (cody.y == 0) {
+                    cody.flyingUp = false;
+                }
+            }
+
+            if (cody.flyingUp === false && cody.y <= canvas.height - cody.height) {
+                cody.y += cody.step;
+                if (cody.y === 480) {
+                    cody.flyingUp = true;
+                }
+            }
+        }
+
         function start() {
             if(looping) return;
             looping = true;
@@ -111,6 +150,7 @@
             lastFrameTime = now;
             loopBackground();
             loopBoky();
+            loopCody();
         }
 
         function loopBackground() {
@@ -128,6 +168,12 @@
         function loopBoky() {
             context.drawImage(boky.image, boky.frame * boky.width, 0, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
             boky.frame = (boky.frame + 1) % boky.attacking.numberOfFrames;
+        }
+
+        function loopCody() {
+            codyFlyingUpAndDown();
+            context.drawImage(cody.image, cody.frame * cody.width, 0, cody.width, cody.height, cody.x, cody.y, cody.width, cody.height);
+            cody.frame = (cody.frame + 1) % cody.flying.numberOfFrames;
         }
 
         return {
