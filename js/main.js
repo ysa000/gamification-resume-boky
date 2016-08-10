@@ -18,7 +18,8 @@
             step: 15,
             attacking: {
                 numberOfFrames: 16
-            }
+            },
+            direction: null
         }
 
         var cody = {
@@ -95,46 +96,60 @@
         }
 
         function loadControls() {
+
             document.onkeydown = function(event) {
-
                 switch(event.keyCode) {
-
                     case 38: // Up
-                        moveBokyUp();
+                        boky.direction = 'up';
+                        event.preventDefault();
                         break;
-
                     case 40: // Down
-                        moveBokyDown();
+                        boky.direction = 'down';
+                        event.preventDefault();
                         break;
-
                     case 37:
-                        moveBokyLeft();
+                        boky.direction = 'left';
+                        event.preventDefault();
                         break;
-
                     case 39:
-                        moveBokyRight();
+                        boky.direction = 'right';
+                        event.preventDefault();
                         break;
-
                 }
             }
+
+            document.onkeyup = function() {
+               boky.direction = null;
+            }
+        }
+
+        function moveBoky() {
+
+            if (boky.direction === 'up') {
+                moveBokyUp();
+            } else if (boky.direction === 'down') {
+                moveBokyDown();
+            } else if (boky.direction === 'left') {
+                moveBokyLeft();
+            } else if (boky.direction === 'right') {
+                moveBokyRight();
+            }
+
             function moveBokyUp() {
                 if (boky.y >= boky.step) {
                     boky.y -= boky.step;
                 }
             }
-
             function moveBokyDown() {
                 if (boky.y <= (canvas.height - boky.height - boky.step)) {
                     boky.y += boky.step;
                 }
             }
-
             function moveBokyLeft() {
                 if (boky.x >= boky.step) {
                     boky.x -= boky.step;
                 }
             }
-
             function moveBokyRight() {
                 if (boky.x <= canvas.width - boky.width) {
                     boky.x += boky.step;
@@ -175,16 +190,17 @@
             villain.image.src = villain.src;
         }
 
-        function detectCollide() {
-            if (boky.x < villain.x + villain.width &&
-                boky.x + boky.width > villain.x &&
-                boky.y < villain.y + villain.height &&
-                boky.height + boky.y > villain.y) {
+        function detectCollide(obj1, obj2) {
+            if (obj1.x < obj2.x + obj2.width &&
+                obj1.x + obj1.width > obj2.x &&
+                obj1.y < obj2.y + obj2.height &&
+                obj1.height + obj1.y > obj2.y) {
                 // Collision détectée
                 console.log('Tu m\'as eu !');
+                return true;
             } else {
                 // Pas de collision détectée
-                console.log('Tu m\'as ratée !')
+                return false;
             }
         }
 
@@ -221,6 +237,7 @@
             loopCody();
             loopVillain();
             loopGameTheme();
+            var collide = detectCollide(boky, villain);
         }
 
         function loopBackground() {
@@ -238,6 +255,7 @@
         function loopBoky() {
             context.drawImage(boky.image, boky.frame * boky.width, 0, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
             boky.frame = (boky.frame + 1) % boky.attacking.numberOfFrames;
+            moveBoky();
         }
 
         function loopCody() {
