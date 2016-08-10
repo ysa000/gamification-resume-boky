@@ -35,6 +35,23 @@
             }
         }
 
+        var villain = {
+            src: './images/sprite/villain-sprite.png',
+            width: 74,
+            height: 80,
+            frame: 0,
+            x: 1000,
+            y: 250,
+            flying: {
+                numberOfFrames : 2
+            }
+        }
+
+        var gameTheme = {
+            src: './music/Brave%20World.wav',
+
+        }
+
         // ========== Width & Height du canvas ==========
         var context = canvas.getContext('2d');
         canvas.width = 1140;
@@ -51,11 +68,14 @@
                 || window.mozRequestAnimationFrame
                 || function(callback) { window.setTimeout(callback, 1000 / 60); };
 
+
         function loadGame() {
             loadBackground();
             loadBoky();
             loadControls();
             loadCody();
+            loadVillain();
+            loadGameTheme();
         }
 
         function loadBackground () {
@@ -114,17 +134,32 @@
         function codyFlyingUpAndDown() {
             if (cody.flyingUp && cody.y >= 0) {
                 cody.y -= cody.step;
-                if (cody.y == 0) {
+                if (cody.y === 0) {
                     cody.flyingUp = false;
                 }
             }
 
             if (cody.flyingUp === false && cody.y <= canvas.height - cody.height) {
                 cody.y += cody.step;
-                if (cody.y === 480) {
+                if (cody.y >= (canvas.height - cody.height)) {
                     cody.flyingUp = true;
                 }
             }
+        }
+
+        function loadVillain() {
+            villain.image = new Image();
+            villain.image.onload = function() {
+                loopVillain(0);
+            };
+            villain.image.src = villain.src;
+        }
+
+        function loadGameTheme() {
+            gameTheme.audio = new Audio('./music/Brave%20World.wav');
+            gameTheme.audio.onload = function() {
+                loopGameTheme();
+            };
         }
 
         function start() {
@@ -151,6 +186,8 @@
             loopBackground();
             loopBoky();
             loopCody();
+            loopVillain();
+            loopGameTheme();
         }
 
         function loopBackground() {
@@ -176,6 +213,15 @@
             cody.frame = (cody.frame + 1) % cody.flying.numberOfFrames;
         }
 
+        function loopVillain() {
+            context.drawImage(villain.image, villain.frame * villain.width, 0, villain.width, villain.height, villain.x, villain.y, villain.width, villain.height);
+            villain.frame = (villain.frame + 1) % villain.flying.numberOfFrames;
+        }
+
+        function loopGameTheme() {
+            gameTheme.audio.play();
+        }
+
         return {
             start: start,
             stop: stop,
@@ -186,15 +232,17 @@
     var canvas = document.getElementById('canvas');
     var bokyGame = Game(canvas);
     bokyGame.load();
-    setTimeout(bokyGame.start, 1000);
+    setTimeout(bokyGame.start, 500);
 
 
     document.getElementById('btnStart').addEventListener('click', function() {
         bokyGame.start();
+        gameTheme.audio.play();
     });
 
     document.getElementById('btnStop').addEventListener('click', function() {
         bokyGame.stop();
+        gameTheme.audio.stop();
     });
 
 // ----------------------------------------------------------------------
