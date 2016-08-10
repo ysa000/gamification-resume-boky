@@ -9,8 +9,10 @@ body {
 }
 
 #btnStart {
-	display: block;
-	margin: auto;
+	display: inline-block;
+}
+#btnStop {
+	display: inline-block;
 }
 
 #frame {
