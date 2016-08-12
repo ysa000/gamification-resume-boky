@@ -1,5 +1,3 @@
-// ========== Anim Background Image du canvas ==========
-
 (function() {
     function Game(canvas) {
 
@@ -7,7 +5,8 @@
         var background = {
             src: './images/background/resized-space-full-bg.jpg',
             motion: 300
-        }
+        };
+
         var boky = {
             src: './images/sprite/boky-sprite.png',
             width: 185,
@@ -20,7 +19,7 @@
                 numberOfFrames: 16
             },
             direction: null
-        }
+        };
 
         var cody = {
             src: './images/sprite/cody-sprite.png',
@@ -34,26 +33,27 @@
             flying: {
                 numberOfFrames: 4
             }
-        }
+        };
 
         var villain = {
             src: './images/sprite/villain-sprite.png',
-            width: 74,
-            height: 80,
+            width: 60,
+            height: 65,
             frame: 0,
-            x: 1000,
+            x: 1080,
             y: 250,
-            flying: {
+            movingLeft: true,
+            step: 5,
+            showing: {
                 numberOfFrames : 2
             }
-        }
+        };
 
         var gameTheme = {
             src: './music/Brave%20World.wav',
+        };
 
-        }
-
-        // ========== Width & Height du canvas ==========
+        // ========== Config du canvas ==========
         var context = canvas.getContext('2d');
         canvas.width = 1140;
         canvas.height = 570;
@@ -79,6 +79,7 @@
             loadGameTheme();
         }
 
+        // ========== Chargement du background ==========
         function loadBackground () {
             background.image = new Image();
             background.image.onload = function() {
@@ -87,6 +88,7 @@
             background.image.src = background.src;
         }
 
+        // ========== Chargement de Boky ==========
         function loadBoky() {
             boky.image = new Image();
             boky.image.onload = function() {
@@ -95,6 +97,7 @@
             boky.image.src = boky.src;
         }
 
+        // ========== Chargement et déf des contrôles de Boky ==========
         function loadControls() {
 
             document.onkeydown = function(event) {
@@ -158,6 +161,7 @@
 
         }
 
+        // ========== Chargement de Cody ==========
         function loadCody() {
             cody.image = new Image();
             cody.image.onload = function() {
@@ -166,6 +170,7 @@
             cody.image.src = cody.src;
         }
 
+        // ========== Chargement et déf du mouvement de Cody
         function codyFlyingUpAndDown() {
             if (cody.flyingUp && cody.y >= 0) {
                 cody.y -= cody.step;
@@ -182,6 +187,7 @@
             }
         }
 
+        // ========== Chargement du villain ==========
         function loadVillain() {
             villain.image = new Image();
             villain.image.onload = function() {
@@ -190,20 +196,78 @@
             villain.image.src = villain.src;
         }
 
+        // ========== Mouvement villain qui traverse la width du canvas de droite à gauche ==========
+        function villainMoving() {
+            // console.log(villain.movingRight); // false
+            // console.log(villain.x); // 1080
+            if (villain.movingLeft && villain.x >= 0) {
+                villain.x -= villain.step;
+                if (villain.x <= 0) {
+                    villain.movingLeft = false;
+                }
+            }
+        }
+
+        // ========== Gestionnaire d'affichage des villains ==========
+        // function villainManager() {
+        //     this.villains = [];
+        //     this.step = 5;
+        //     this.spawnFrequency = 1200;
+        //     this.spawnTimer = 0;
+
+        //     this.spawnEnemy = function(currentTime) {
+        //         var skull = new villain(currentTime);
+        //         villain.x = canvas.width;
+        //         villain.y = Math.random() * (canvas.height - villain.height);
+        //         console.log('Spawned villain !');
+        //         this.villains.push(skull);
+        //     }
+
+        //     this.update = function(timeElapsed, currentTime) {
+        //         this.spawnTimer += timeElapsed;
+        //         if (this.spawnTimer > this.spawnFrequency) {
+        //             this.spawnEnemy(currentTime);
+        //             this.spawnTimer = 0
+        //         }
+
+        //         for (var i = 0; i < this.villains.length; i++) {
+        //             var skull = this.villains[i];
+        //             if (skull !== null) {
+        //                 villain.x += this.step;
+
+        //                 if (skull.x < 0 - villain.width) {
+        //                     this.killSkull(skull);
+        //                 }
+        //             }
+        //         }
+        //     }
+
+        //     this.draw = function(canvas, timeElapsed, currentTime) {
+        //         var
+        //     }
+
+
+
+
+
+        // }
+
+        // ========== Détection de collisions ==========
         function detectCollide(obj1, obj2) {
             if (obj1.x < obj2.x + obj2.width &&
                 obj1.x + obj1.width > obj2.x &&
                 obj1.y < obj2.y + obj2.height &&
                 obj1.height + obj1.y > obj2.y) {
-                // Collision détectée
-                console.log('Tu m\'as eu !');
+                // >>>>> Collision détectée
+                console.log('Touché !');
                 return true;
             } else {
-                // Pas de collision détectée
+                // >>>>> Pas de collision détectée
                 return false;
             }
         }
 
+        // ========== Chargement de la musique du jeu
         function loadGameTheme() {
             gameTheme.audio = new Audio('./music/Brave%20World.wav');
             gameTheme.audio.onload = function() {
@@ -236,10 +300,11 @@
             loopBoky();
             loopCody();
             loopVillain();
-            loopGameTheme();
+            //loopGameTheme();
             var collide = detectCollide(boky, villain);
         }
 
+        // ========== Répétition du défilement du background ==========
         function loopBackground() {
              var numImages = Math.ceil(canvas.width / background.image.width) + 1;
              var xpos = totalSeconds * background.motion % background.image.width;
@@ -252,22 +317,28 @@
              context.restore();
         }
 
+        // ========== Répétition de l'affichage de Boky ==========
         function loopBoky() {
             context.drawImage(boky.image, boky.frame * boky.width, 0, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
             boky.frame = (boky.frame + 1) % boky.attacking.numberOfFrames;
             moveBoky();
         }
 
+        // ========== Répétition de l'affichage de Cody ==========
         function loopCody() {
             codyFlyingUpAndDown();
             context.drawImage(cody.image, cody.frame * cody.width, 0, cody.width, cody.height, cody.x, cody.y, cody.width, cody.height);
             cody.frame = (cody.frame + 1) % cody.flying.numberOfFrames;
         }
 
+        // ========== Répétition de l'affichage du villain ==========
         function loopVillain() {
+            villainMoving();
             context.drawImage(villain.image, villain.frame * villain.width, 0, villain.width, villain.height, villain.x, villain.y, villain.width, villain.height);
-            villain.frame = (villain.frame + 1) % villain.flying.numberOfFrames;
+            villain.frame = (villain.frame + 1) % villain.showing.numberOfFrames;
         }
+
+        // ========== Répétition de la musique du jeu ==========
 
         function loopGameTheme() {
             gameTheme.audio.play();
