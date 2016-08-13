@@ -3,7 +3,7 @@
 
     	// ========== Config ==========
         var background = {
-            src: './images/background/resized-space-full-bg.jpg',
+            src: './images/background/resized-mountain-full-bg.jpg',
             motion: 300
         };
 
@@ -44,13 +44,17 @@
             y: 250,
             movingLeft: true,
             step: 5,
+            spawnX: canvas.width, // spawns villains at canvas width 1140px
+            spawnFrequency: 1250, // spawns villains every 1.75s
+            spawnSpeed: 5, // sets how fast the villains will be spawned
+            lastSpawn: -1, // when was the last villain spawned
             showing: {
                 numberOfFrames : 2
             }
         };
 
         var gameTheme = {
-            src: './music/Brave%20World.wav',
+            src: './music/Xingu%20Loop.wav',
         };
 
         // ========== Config du canvas ==========
@@ -77,6 +81,7 @@
             loadCody();
             loadVillain();
             loadGameTheme();
+            // spawnVillains();
         }
 
         // ========== Chargement du background ==========
@@ -208,49 +213,9 @@
             }
         }
 
-        // ========== Gestionnaire d'affichage des villains ==========
-        // function villainManager() {
-        //     this.villains = [];
-        //     this.step = 5;
-        //     this.spawnFrequency = 1200;
-        //     this.spawnTimer = 0;
-
-        //     this.spawnEnemy = function(currentTime) {
-        //         var skull = new villain(currentTime);
-        //         villain.x = canvas.width;
-        //         villain.y = Math.random() * (canvas.height - villain.height);
-        //         console.log('Spawned villain !');
-        //         this.villains.push(skull);
-        //     }
-
-        //     this.update = function(timeElapsed, currentTime) {
-        //         this.spawnTimer += timeElapsed;
-        //         if (this.spawnTimer > this.spawnFrequency) {
-        //             this.spawnEnemy(currentTime);
-        //             this.spawnTimer = 0
-        //         }
-
-        //         for (var i = 0; i < this.villains.length; i++) {
-        //             var skull = this.villains[i];
-        //             if (skull !== null) {
-        //                 villain.x += this.step;
-
-        //                 if (skull.x < 0 - villain.width) {
-        //                     this.killSkull(skull);
-        //                 }
-        //             }
-        //         }
-        //     }
-
-        //     this.draw = function(canvas, timeElapsed, currentTime) {
-        //         var
-        //     }
+        // ========== Gestionnaire d'affichage aléatoire des villains ==========
 
 
-
-
-
-        // }
 
         // ========== Détection de collisions ==========
         function detectCollide(obj1, obj2) {
