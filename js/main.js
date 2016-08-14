@@ -45,13 +45,15 @@
             movingLeft: true,
             step: 5,
             spawnX: canvas.width, // spawns villains at canvas width 1140px
-            spawnFrequency: 1250, // spawns villains every 1.75s
-            spawnSpeed: 5, // sets how fast the villains will be spawned
-            lastSpawn: -1, // when was the last villain spawned
+            spawnFrequency: 1250, // spawns villains every 1.25s
+            spawnSpeed: 5, // sets how fast the villains move
+            lastSpawn: -1, // when was the last villain spawned,
             showing: {
                 numberOfFrames : 2
             }
         };
+
+        var villainsArray = new Array();
 
         var gameTheme = {
             playing: true,
@@ -204,13 +206,8 @@
 
         // ========== Mouvement villain qui traverse la width du canvas de droite à gauche ==========
         function villainMoving() {
-            // console.log(villain.movingRight); // false
-            // console.log(villain.x); // 1080
-            if (villain.movingLeft && villain.x >= 0) {
+            if (villain.movingLeft && villain.x >= !canvas.width - villain.width) {
                 villain.x -= villain.step;
-                if (villain.x <= 0) {
-                    villain.movingLeft = false;
-                }
             }
         }
 
