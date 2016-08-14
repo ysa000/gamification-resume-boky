@@ -54,7 +54,8 @@
         };
 
         var gameTheme = {
-            src: './music/Xingu%20Loop.wav',
+            playing: true,
+            src: './music/Xingu%20Loop.wav'
         };
 
         // ========== Config du canvas ==========
@@ -215,8 +216,6 @@
 
         // ========== Gestionnaire d'affichage aléatoire des villains ==========
 
-
-
         // ========== Détection de collisions ==========
         function detectCollide(obj1, obj2) {
             if (obj1.x < obj2.x + obj2.width &&
@@ -232,12 +231,25 @@
             }
         }
 
-        // ========== Chargement de la musique du jeu
+        // ========== Chargement de la musique du jeu ==========
         function loadGameTheme() {
-            gameTheme.audio = new Audio('./music/Brave%20World.wav');
+            gameTheme.audio = new Audio();
             gameTheme.audio.onload = function() {
                 loopGameTheme();
             };
+            gameTheme.audio.src = gameTheme.src;
+        }
+
+        // ========== Fonction de mute/unmute la musique du jeu depuis le #btnMute ==========
+        function muteGameTheme() {
+            var muteBtn = document.getElementById('btnMute');
+            if (!gameTheme.audio.muted) {
+                gameTheme.audio.muted = false;
+                muteBtn.innerHTML = 'Unmute';
+            } else {
+                gameTheme.audio.muted = true;
+                muteBtn.innerHTML = 'Mute';
+            }
         }
 
         function start() {
@@ -265,7 +277,7 @@
             loopBoky();
             loopCody();
             loopVillain();
-            //loopGameTheme();
+            loopGameTheme();
             var collide = detectCollide(boky, villain);
         }
 
@@ -304,7 +316,6 @@
         }
 
         // ========== Répétition de la musique du jeu ==========
-
         function loopGameTheme() {
             gameTheme.audio.play();
         }
@@ -324,12 +335,15 @@
 
     document.getElementById('btnStart').addEventListener('click', function() {
         bokyGame.start();
-        // gameTheme.audio.play();
     });
 
     document.getElementById('btnStop').addEventListener('click', function() {
         bokyGame.stop();
-        // gameTheme.audio.stop();
+    });
+
+
+    document.getElementById('btnMute').addEventListener('click', function() {
+        bokyGame.muteGameTheme();
     });
 
 // ----------------------------------------------------------------------
