@@ -35,7 +35,7 @@
             }
         };
 
-        var villain = {
+        var villains = {
             src: './images/sprite/villain-sprite.png',
             width: 60,
             height: 65,
@@ -48,12 +48,11 @@
             spawnFrequency: 1250, // spawns villains every 1.25s
             spawnSpeed: 5, // sets how fast the villains move
             lastSpawn: -1, // when was the last villain spawned,
+            array: [],
             showing: {
                 numberOfFrames : 2
             }
         };
-
-        var villainsArray = new Array();
 
         var gameTheme = {
             playing: true,
@@ -82,8 +81,10 @@
             loadBoky();
             loadControls();
             loadCody();
+            //repeatVillains();
             loadVillain();
             loadGameTheme();
+
             // spawnVillains();
         }
 
@@ -195,23 +196,36 @@
             }
         }
 
-        // ========== Chargement du villain ==========
+        //========== Chargement du villain ==========
         function loadVillain() {
-            villain.image = new Image();
-            villain.image.onload = function() {
+            villains.image = new Image();
+            villains.image.onload = function() {
                 loopVillain(0);
-            };
-            villain.image.src = villain.src;
+            }
+            var villain = {
+                x: villains.spawnX,
+                y: Math.random() * (canvas.height - 100) + 50,
+            }
+            villains.array.push(villain);
+                console.log('un monstre, sans image ?');
+                console.log(villains.array);
+            villains.image.src = villains.src;
         }
 
-        // ========== Mouvement villain qui traverse la width du canvas de droite à gauche ==========
-        function villainMoving() {
-            if (villain.movingLeft && villain.x >= !canvas.width - villain.width) {
-                villain.x -= villain.step;
+        function repeatVillains() {
+            var time = Date.now();
+            if (time > (villains.lastSpawn + villains.spawnFrequency)) {
+                villains.lastSpawn = time;
+                loadVillain();
+                console.log('Bout de la fonction repeatVillains')
             }
         }
 
-        // ========== Gestionnaire d'affichage aléatoire des villains ==========
+        function villainMoving() {
+            if (villains.movingLeft && villains.x >= !canvas.width - villains.width) {
+                villains.x -= villains.step;
+            }
+        }
 
         // ========== Détection de collisions ==========
         function detectCollide(obj1, obj2) {
@@ -273,9 +287,10 @@
             loopBackground();
             loopBoky();
             loopCody();
+            repeatVillains();
             loopVillain();
             loopGameTheme();
-            var collide = detectCollide(boky, villain);
+            var collide = detectCollide(boky, villains);
         }
 
         // ========== Répétition du défilement du background ==========
@@ -308,8 +323,8 @@
         // ========== Répétition de l'affichage du villain ==========
         function loopVillain() {
             villainMoving();
-            context.drawImage(villain.image, villain.frame * villain.width, 0, villain.width, villain.height, villain.x, villain.y, villain.width, villain.height);
-            villain.frame = (villain.frame + 1) % villain.showing.numberOfFrames;
+            context.drawImage(villains.image, villains.frame * villains.width, 0, villains.width, villains.height, villains.x, villains.y, villains.width, villains.height);
+            villains.frame = (villains.frame + 1) % villains.showing.numberOfFrames;
         }
 
         // ========== Répétition de la musique du jeu ==========
