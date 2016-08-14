@@ -47,7 +47,7 @@
             spawnX: canvas.width, // spawns villains at canvas width 1140px
             spawnFrequency: 1250, // spawns villains every 1.25s
             spawnSpeed: 5, // sets how fast the villains move
-            lastSpawn: -1, // when was the last villain spawned,
+            lastSpawn: 0, // when was the last villain spawned,
             array: [],
             number: 10,
             showing: {
@@ -82,7 +82,6 @@
             loadBoky();
             loadControls();
             loadCody();
-            loadVillains();
             loadGameTheme();
         }
 
@@ -195,20 +194,23 @@
         }
 
         //========== Chargement du villain ==========
-        function loadVillains() {
-            for(var i = 0; i < villains.number; i++) {
+        function spawnVillains() {
+            var time = Date.now();
+            if (time > (villains.lastSpawn + villains.spawnFrequency)) {
+                villains.lastSpawn = time;
                 villains.array.push(loadVillain());
+                console.log('Bout de la fonction spawnVillains')
             }
+        }
 
-            function loadVillain() {
-                var villain = {}
-                villain.x = villains.spawnX,
-                villain.y = Math.random() * (canvas.height - 100) + 50,
-                villain.frame = 0;
-                villain.image = new Image();
-                villain.image.src = villains.src;
-                return villain;
-            }
+        function loadVillain() {
+            var villain = {}
+            villain.x = villains.spawnX,
+            villain.y = Math.random() * (canvas.height - 100) + 50,
+            villain.frame = 0;
+            villain.image = new Image();
+            villain.image.src = villains.src;
+            return villain;
         }
 
         function villainMoving() {
@@ -274,6 +276,7 @@
             var now = Date.now();
             totalSeconds += (now - lastFrameTime) / 1000;
             lastFrameTime = now;
+            spawnVillains();
             loopBackground();
             loopBoky();
             loopCody();
@@ -312,6 +315,7 @@
         // ========== Répétition de l'affichage du villain ==========
         function loopVillains() {
             // villainMoving();
+
             for(var i = 0; i < villains.array.length; i++) {
                 var villain = villains.array[i];
                 context.drawImage(villain.image, villain.frame * villains.width, 0, villains.width, villains.height, villain.x, villain.y, villains.width, villains.height);
