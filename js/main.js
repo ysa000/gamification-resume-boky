@@ -49,6 +49,7 @@
             spawnSpeed: 5, // sets how fast the villains move
             lastSpawn: -1, // when was the last villain spawned,
             array: [],
+            number: 10,
             showing: {
                 numberOfFrames : 2
             }
@@ -81,11 +82,8 @@
             loadBoky();
             loadControls();
             loadCody();
-            //repeatVillains();
-            loadVillain();
+            loadVillains();
             loadGameTheme();
-
-            // spawnVillains();
         }
 
         // ========== Chargement du background ==========
@@ -197,27 +195,19 @@
         }
 
         //========== Chargement du villain ==========
-        function loadVillain() {
-            villains.image = new Image();
-            villains.image.onload = function() {
-                loopVillain(0);
+        function loadVillains() {
+            for(var i = 0; i < villains.number; i++) {
+                villains.array.push(loadVillain());
             }
-            var villain = {
-                x: villains.spawnX,
-                y: Math.random() * (canvas.height - 100) + 50,
-            }
-            villains.array.push(villain);
-                console.log('un monstre, sans image ?');
-                console.log(villains.array);
-            villains.image.src = villains.src;
-        }
 
-        function repeatVillains() {
-            var time = Date.now();
-            if (time > (villains.lastSpawn + villains.spawnFrequency)) {
-                villains.lastSpawn = time;
-                loadVillain();
-                console.log('Bout de la fonction repeatVillains')
+            function loadVillain() {
+                var villain = {}
+                villain.x = villains.spawnX,
+                villain.y = Math.random() * (canvas.height - 100) + 50,
+                villain.frame = 0;
+                villain.image = new Image();
+                villain.image.src = villains.src;
+                return villain;
             }
         }
 
@@ -287,8 +277,7 @@
             loopBackground();
             loopBoky();
             loopCody();
-            repeatVillains();
-            loopVillain();
+            loopVillains();
             loopGameTheme();
             var collide = detectCollide(boky, villains);
         }
@@ -321,10 +310,13 @@
         }
 
         // ========== Répétition de l'affichage du villain ==========
-        function loopVillain() {
-            villainMoving();
-            context.drawImage(villains.image, villains.frame * villains.width, 0, villains.width, villains.height, villains.x, villains.y, villains.width, villains.height);
-            villains.frame = (villains.frame + 1) % villains.showing.numberOfFrames;
+        function loopVillains() {
+            // villainMoving();
+            for(var i = 0; i < villains.array.length; i++) {
+                var villain = villains.array[i];
+                context.drawImage(villain.image, villain.frame * villains.width, 0, villains.width, villains.height, villain.x, villain.y, villains.width, villains.height);
+                villain.frame = (villain.frame + 1) % villains.showing.numberOfFrames;
+            }
         }
 
         // ========== Répétition de la musique du jeu ==========
