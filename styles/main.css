@@ -107,12 +107,8 @@ body {
 #btnStart {
   display: inline-block;
 }
-/*#btnStop {
-  display: inline-block;
-}
-*/
 .gameBtn {
-  color: #333;
+  /*color: #333;*/
   margin: 20px 10px 0 10px;
   width: 75px;
 }
