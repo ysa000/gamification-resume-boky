@@ -61,7 +61,7 @@
         };
 
         var gameTheme = {
-            playing: true,
+            playing: false,
             src: './music/Xingu%20Loop.wav'
         };
 
@@ -81,7 +81,7 @@
             loadBoky();
             loadControls();
             loadCody();
-            //loadGameTheme();
+            loadGameTheme();
         }
 
         // ========== Chargement du background ==========
@@ -236,23 +236,27 @@
         // ========== Chargement de la musique du jeu ==========
         function loadGameTheme() {
             gameTheme.audio = new Audio();
-            gameTheme.audio.onload = function() {
-                loopGameTheme();
-            };
             gameTheme.audio.src = gameTheme.src;
+            gameTheme.audio.play();
+            console.log('music on');
         }
 
-        // ========== Fonction de mute/unmute la musique du jeu depuis le #btnMute ==========
-        function muteGameTheme() {
-            var muteBtn = document.getElementById('btnMute');
-            if (!gameTheme.audio.muted) {
-                gameTheme.audio.muted = false;
-                muteBtn.innerHTML = 'Unmute';
-            } else {
-                gameTheme.audio.muted = true;
-                muteBtn.innerHTML = 'Mute';
+        // ========== Mute/unmute le game theme ==========
+        function muteTheme() {
+            if (looping && gameTheme.playing) {
+                gameTheme.audio.stop();
+                console.log('music off');
+                gameTheme.playing = false;
             }
         }
+
+        // ========== Stop le game theme lorsque le jeu est pausé ==========
+        function pauseTheme() {
+            if (!looping) {
+                gameTheme.audio.pause();
+            }
+        }
+
 
         function start() {
             if(looping) return;
@@ -263,6 +267,8 @@
 
         function stop() {
             looping = false;
+            pauseTheme();
+            console.log(looping);
         }
 
         function loop() {
@@ -280,7 +286,7 @@
             loopBoky();
             loopCody();
             loopVillains();
-            //loopGameTheme();
+            loopGameTheme();
             for (var i = 0; i < Villain.array.length; i++) {
             // Balaie le tableau de villains pour détecter si il y a collision entre Boky et chaque villain
                 var collide = detectCollide(boky, Villain.array[i]);
@@ -332,6 +338,7 @@
         return {
             start: start,
             stop: stop,
+            music: muteTheme,
             load: loadGame
         }
     }
@@ -350,9 +357,8 @@
         bokyGame.stop();
     });
 
-
-    document.getElementById('btnMute').addEventListener('click', function() {
-        bokyGame.muteGameTheme();
-    });
+    // document.getElementById('btnMute').addEventListener('click', function() {
+    //     bokyGame.muteTheme();
+    // });
 
 }());
