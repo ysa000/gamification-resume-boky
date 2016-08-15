@@ -1,7 +1,12 @@
 (function() {
     function Game(canvas) {
 
-    	// ========== Config ==========
+        // ========== Config du canvas ==========
+        var context = canvas.getContext('2d');
+        canvas.width = 1140;
+        canvas.height = 570;
+
+        // ========== Config ==========
         var background = {
             src: './images/background/resized-mountain-full-bg.jpg',
             motion: 300
@@ -35,18 +40,18 @@
             }
         };
 
-        var villains = {
+        var Villain = {
             src: './images/sprite/villain-sprite.png',
             width: 60,
             height: 65,
             frame: 0,
-            x: 1080,
-            y: 250,
-            movingLeft: true,
+            // x: 1080,
+            // y: 250,
+            // movingLeft: true,
             step: 5,
-            spawnX: canvas.width, // spawns villains at canvas width 1140px
+            spawnX: canvas.width - 60, // spawnsV at canvas width 1140px
             spawnFrequency: 1250, // spawns villains every 1.25s
-            spawnSpeed: 5, // sets how fast the villains move
+            //spawnSpeed: 5, // sets how fast the villains move
             lastSpawn: 0, // when was the last villain spawned,
             array: [],
             number: 10,
@@ -60,11 +65,6 @@
             src: './music/Xingu%20Loop.wav'
         };
 
-        // ========== Config du canvas ==========
-        var context = canvas.getContext('2d');
-        canvas.width = 1140;
-        canvas.height = 570;
-
         // ========== Variables d'animation du canvas ====
         var looping = false;
         var totalSeconds = 0;
@@ -76,13 +76,12 @@
                 || window.mozRequestAnimationFrame
                 || function(callback) { window.setTimeout(callback, 1000 / 60); };
 
-
         function loadGame() {
             loadBackground();
             loadBoky();
             loadControls();
             loadCody();
-            loadGameTheme();
+            //loadGameTheme();
         }
 
         // ========== Chargement du background ==========
@@ -193,35 +192,35 @@
             }
         }
 
-        //========== Chargement du villain ==========
+        //========== Fonction de spawn des villains ==========
         function spawnVillains() {
             var time = Date.now();
-            if (time > (villains.lastSpawn + villains.spawnFrequency)) {
-                villains.lastSpawn = time;
-                villains.array.push(loadVillain());
-                console.log('Bout de la fonction spawnVillains')
+            if (time > (Villain.lastSpawn + Villain.spawnFrequency)) {
+                Villain.lastSpawn = time;
+                Villain.array.push(loadVillain());
             }
         }
-
+        //========== Chargement de villain ==========
         function loadVillain() {
             var villain = {}
-            villain.x = villains.spawnX,
+            villain.width = 60,
+            villain.height = 65,
+            villain.x = Villain.spawnX,
             villain.y = Math.random() * (canvas.height - 100) + 50,
             villain.frame = 0;
             villain.image = new Image();
-            villain.image.src = villains.src;
+            villain.image.src = Villain.src;
             return villain;
         }
 
-        function villainMoving() {
-            if (villains.movingLeft && villains.x >= !canvas.width - villains.width) {
-                villains.x -= villains.step;
-            }
+        // ========== Mouvement de villain ==========
+        function villainMoving(villain) {
+            villain.x -= Villain.step;
         }
 
         // ========== Détection de collisions ==========
         function detectCollide(obj1, obj2) {
-            if (obj1.x < obj2.x + obj2.width &&
+            if (obj1.x < obj2.x + obj2.width && // posX Boky < posX Villain + width Villain
                 obj1.x + obj1.width > obj2.x &&
                 obj1.y < obj2.y + obj2.height &&
                 obj1.height + obj1.y > obj2.y) {
@@ -281,21 +280,24 @@
             loopBoky();
             loopCody();
             loopVillains();
-            loopGameTheme();
-            var collide = detectCollide(boky, villains);
+            //loopGameTheme();
+            for (var i = 0; i < Villain.array.length; i++) {
+            // Balaie le tableau de villains pour détecter si il y a collision entre Boky et chaque villain
+                var collide = detectCollide(boky, Villain.array[i]);
+            }
         }
 
         // ========== Répétition du défilement du background ==========
         function loopBackground() {
-             var numImages = Math.ceil(canvas.width / background.image.width) + 1;
-             var xpos = totalSeconds * background.motion % background.image.width;
+            var numImages = Math.ceil(canvas.width / background.image.width) + 1;
+            var xpos = totalSeconds * background.motion % background.image.width;
 
-             context.save();
-             context.translate(-xpos, 0);
-             for (var i = 0; i < numImages; i++) {
-                 context.drawImage(background.image, i * background.image.width, 0);
-             }
-             context.restore();
+            context.save();
+            context.translate(-xpos, 0);
+            for (var i = 0; i < numImages; i++) {
+                context.drawImage(background.image, i * background.image.width, 0);
+            }
+            context.restore();
         }
 
         // ========== Répétition de l'affichage de Boky ==========
@@ -314,12 +316,11 @@
 
         // ========== Répétition de l'affichage du villain ==========
         function loopVillains() {
-            // villainMoving();
-
-            for(var i = 0; i < villains.array.length; i++) {
-                var villain = villains.array[i];
-                context.drawImage(villain.image, villain.frame * villains.width, 0, villains.width, villains.height, villain.x, villain.y, villains.width, villains.height);
-                villain.frame = (villain.frame + 1) % villains.showing.numberOfFrames;
+            for(var i = 0; i < Villain.array.length; i++) {
+                var villain = Villain.array[i];
+                context.drawImage(villain.image, villain.frame * Villain.width, 0, Villain.width, Villain.height, villain.x, villain.y, Villain.width, Villain.height);
+                villain.frame = (villain.frame + 1) % Villain.showing.numberOfFrames;
+            villainMoving(villain);
             }
         }
 
@@ -354,93 +355,4 @@
         bokyGame.muteGameTheme();
     });
 
-// ----------------------------------------------------------------------
-    // ========== Movements Boky ==========
-/*
-    var FPS = 60;
-    var movingInterval = -1;
-    var boky = document.getElementById('frame');
-
-    function initBoky() {
-        boky.style.top = bokyStartTop + 'px';
-        boky.style.left = bokyStartLeft + 'px';
-    }
-
-    document.onkeydown = movementsBoky;
-
-    function movementsBoky(event) {
-        var direction;
-
-        var moveUp = function(element, step) {
-            var top = element.style.top;
-            element.style.top = parseFloat(top) - step + 'px';
-        };
-
-        var moveDown = function(element, step) {
-            var top = element.style.top;
-            element.style.top = parseFloat(top) + step + 'px';
-            //if (element === )
-        }
-
-        var moveRight = function(element, step) {
-            var left = element.style.left;
-            element.style.left = parseFloat(left) + step + 'px';
-        }
-
-        var moveLeft = function(element, step) {
-            var left = element.style.left;
-            element.style.left = parseFloat(left) - step + 'px';
-        };
-
-        switch(event.keyCode) {
-
-            case 38: // Up arrow key
-                direction = 'up';
-                break;
-
-            case 40: // Down arrow key
-                direction = 'down';
-                break;
-
-            case 37: // Left arrow key
-                direction = 'left';
-                break;
-
-            case 39: // Right arrow key
-                direction = 'right';
-                break;
-
-            default:
-
-        }
-
-        startMoving();
-
-        function startMoving() {
-            if(movingInterval === -1) {
-                // direction
-                var directionFunction;
-                //
-                if (direction === 'up') {
-                    directionFunction = moveUp;
-                } else if (direction === 'down') {
-                    directionFunction = moveDown;
-                } else if (direction === 'left') {
-                    directionFunction = moveLeft;
-                } else if (direction === 'right') {
-                    directionFunction = moveRight;
-                }
-
-                movingInterval = setInterval(directionFunction, 1000 / FPS, boky, stepBoky);
-            }
-        }
-
-    }
-
-    document.onkeyup = function stopMoving() {
-        clearInterval(movingInterval);
-        movingInterval = -1;
-    }
-    initBoky();
-*/
 }());
