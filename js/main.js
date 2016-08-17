@@ -61,8 +61,9 @@
         };
 
         var gameTheme = {
-            playing: false,
-            src: './music/Xingu%20Loop.wav'
+            src: './music/Xingu%20Loop.wav',
+            playing: true,
+            muted: false
         };
 
         // ========== Variables d'animation du canvas ====
@@ -238,15 +239,23 @@
             gameTheme.audio = new Audio();
             gameTheme.audio.src = gameTheme.src;
             gameTheme.audio.play();
-            console.log('music on');
         }
 
         // ========== Mute/unmute le game theme ==========
         function muteTheme() {
-            if (looping && gameTheme.playing) {
-                gameTheme.audio.stop();
-                console.log('music off');
+            var muteBtn = document.getElementById('btnMute');
+            if (gameTheme.playing) {
+                gameTheme.audio.pause();
                 gameTheme.playing = false;
+                console.log(gameTheme.playing);
+                muteBtn.innerHTML = 'Unmute';
+
+            } else {
+                gameTheme.audio.play();
+                gameTheme.playing = true;
+                console.log(gameTheme.playing);
+                console.log('no music');
+                muteBtn.innerHTML = 'Mute';
             }
         }
 
@@ -254,23 +263,28 @@
         function pauseTheme() {
             if (!looping) {
                 gameTheme.audio.pause();
+            } else {
+                gameTheme.audio.play();
+
             }
         }
 
-
+        // ========== Début / Reprise du jeu ==========
         function start() {
             if(looping) return;
             looping = true;
             lastFrameTime = Date.now();
             requestAnimationFrame(loop);
+            pauseTheme();
         }
 
+        // ========== Arrêt / Pause du jeu ==========
         function stop() {
             looping = false;
             pauseTheme();
-            console.log(looping);
         }
 
+        // ========== Boucle les animations du jeu ==========
         function loop() {
             if (!looping) {
                 return;
@@ -288,7 +302,7 @@
             loopVillains();
             loopGameTheme();
             for (var i = 0; i < Villain.array.length; i++) {
-            // Balaie le tableau de villains pour détecter si il y a collision entre Boky et chaque villain
+            // Parcourt le tableau de villains pour détecter s'il y a collision entre Boky et chaque villain
                 var collide = detectCollide(boky, Villain.array[i]);
             }
         }
@@ -297,7 +311,6 @@
         function loopBackground() {
             var numImages = Math.ceil(canvas.width / background.image.width) + 1;
             var xpos = totalSeconds * background.motion % background.image.width;
-
             context.save();
             context.translate(-xpos, 0);
             for (var i = 0; i < numImages; i++) {
@@ -332,16 +345,19 @@
 
         // ========== Répétition de la musique du jeu ==========
         function loopGameTheme() {
-            gameTheme.audio.play();
+            if (!looping) {
+                gameTheme.audio.play();
+            }
         }
 
         return {
             start: start,
             stop: stop,
-            music: muteTheme,
+            muteTheme: muteTheme,
             load: loadGame
         }
-    }
+
+    } // << Fin de la fonction Game >>
 
     var canvas = document.getElementById('canvas');
     var bokyGame = Game(canvas);
@@ -357,8 +373,9 @@
         bokyGame.stop();
     });
 
-    // document.getElementById('btnMute').addEventListener('click', function() {
-    //     bokyGame.muteTheme();
-    // });
+    document.getElementById('btnMute').addEventListener('click', function() {
+        bokyGame.muteTheme();
+    });
 
-}());
+
+}()); // << Fin de la main function >>
