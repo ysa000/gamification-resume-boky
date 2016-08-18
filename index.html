@@ -15,14 +15,14 @@
     <link href="./styles/bootstrap.min.css" rel="stylesheet">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <!-- <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet"> -->
 
     <!-- Custom styles for this template -->
     <link href="./styles/styles.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+    <!-- <script src="../../assets/js/ie-emulation-modes-warning.js"></script> -->
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -78,7 +78,7 @@
       </div>
       <p class="lead">Ce site est le résultat de mon projet front-end à l'IFOCOP, où je suis une formation en Développement-Intégration Full Stack JavaScript. Cette formation de 4 mois (intenses !) me permettra d'acquérir les compétences nécessaires pour débuter ma carrière de développeuse JS. A la fin de la formation, j'intégrerai un stage de consolidation, pour mettre en pratique les acquis des mois précédents, et aussi pour monter en compétences afin d'intégrer mon premier poste.</p>
       <p class="lead">Je vous invite à découvrir mon parcours professionnel, mais avant ça, je vous propose un petit moment convivial en compagnie de Boky, un glaçon en ballade dans un cadre bucolique. </p>
-    </div>
+    </div> <!-- /Section A Propos -->
 
     <!-- Section Jeu -->
     <div id="jeu" class="container">
@@ -94,9 +94,9 @@
           <button id="btnStart" class="btn btn-sm gameBtn">Play</button>
           <button id="btnStop" class="btn btn-sm gameBtn">Stop</button>
           <button id="btnMute" class="btn btn-sm gameBtn">Mute</button>
-        </div>
-      </div>
-    <!-- End Canvas wrap-->
+        </div> <!-- /Section Jeu -->
+      </div> <!-- /Canvas wrap-->
+
 
     <!-- Section Parcours -->
     <div id="parcours" class="container">
@@ -104,31 +104,116 @@
         <h2>Parcours</h2>
       </div>
       <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-      quis nostrud ullamco laboris nisi ut aliquip ex ea commodo
-      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      <a class="btn btn-default" href="cv_isabelle-yim.pdf" role="button" target="_blank">Mon CV</a>
-      <button class="btn btn-sm">Hello</button>
-    </div>
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+      <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+              2016 - Développeuse Full Stack JavaScript en formation - IFOCOP - Paris 75011</a>
+            </h4>
+          </div>
+          <div id="collapse1" class="panel-collapse collapse in">
+            <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+            minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo consequat.</div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+              2015 - Chef de Projet Digital - Big Youth - Paris 75002</a>
+            </h4>
+          </div>
+          <div id="collapse2" class="panel-collapse collapse">
+            <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+            minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo consequat.</div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+              2014 - Chef de Projet Multimédia en formation - IESA Multimédia - Paris 75002</a>
+            </h4>
+          </div>
+          <div id="collapse3" class="panel-collapse collapse">
+            <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+            minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo consequat.</div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+              2010 à 2014 - Conseillère-Voyages / Forfaitiste - La Maison de la Chine et de l'Indochine - Paris 75006</a>
+            </h4>
+          </div>
+          <div id="collapse4" class="panel-collapse collapse">
+            <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+            minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo consequat.</div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">
+              2008 à 2010 - Online Travel Advisor - Viator - London UK</a>
+            </h4>
+          </div>
+          <div id="collapse5" class="panel-collapse collapse">
+            <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+            minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo consequat.</div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse6">
+              2005 à 2008 - Conseillère-Voyages / Forfaitiste - La Maison de la Chine et de l'Indochine - Paris 75006</a>
+            </h4>
+          </div>
+          <div id="collapse6" class="panel-collapse collapse">
+            <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+            minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo consequat.</div>
+          </div>
+        </div>
+      </div>
+
+        <a class="btn btn-default" href="cv_isabelle-yim.pdf" role="button" target="_blank">Mon CV</a>
+    </div> <!-- /Section Parcours-->
 
     <footer class="footer">
       <div class="container">
         <p class="text-muted"><i class="fa fa-heart" aria-hidden="true"></i>Built by <a href="https://twitter.com/IsabelleYim" title="twitter-isabelle-yim" target="_blank">@IsabelleYim</a> - 2016</p>
-        <!-- <p class="text-muted">Isabelle Yim - 2016</p> -->
       </div>
     </footer>
 
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <!-- <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script> -->
     <script src="./js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
     <script type="text/javascript" src="./js/main.js"></script>
   </body>
 </html>

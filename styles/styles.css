@@ -117,6 +117,22 @@ body {
   width: 75px;
 }
 
+/*
+* Accordeon
+*/
+
+h4.panel-title {
+  text-align: left;
+}
+
+.panel-body {
+  color: #333;
+}
+
+/*
+* Media Queries
+*/
+
 @media (min-width: 320px) {
   /* Start the vertical centering */
   .site-wrapper-inner {

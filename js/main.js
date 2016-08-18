@@ -82,7 +82,7 @@
             loadBoky();
             loadControls();
             loadCody();
-            loadGameTheme();
+            //loadGameTheme();
         }
 
         // ========== Chargement du background ==========
@@ -300,7 +300,7 @@
             loopBoky();
             loopCody();
             loopVillains();
-            loopGameTheme();
+            //loopGameTheme();
             for (var i = 0; i < Villain.array.length; i++) {
             // Parcourt le tableau de villains pour détecter s'il y a collision entre Boky et chaque villain
                 var collide = detectCollide(boky, Villain.array[i]);
