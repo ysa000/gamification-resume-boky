@@ -57,14 +57,10 @@
             src: './images/sprite/villain-sprite.png',
             width: 60,
             height: 65,
+            spawnX: canvas.width - 60, // spawnsV at canvas width 1140px
             frame: 0,
             step: 5,
-            spawnX: canvas.width - 60, // spawnsV at canvas width 1140px
-            spawnFrequency: 1250, // spawns villains every 1.25s
-            //spawnSpeed: 5, // sets how fast the villains move
-            lastSpawn: 0, // when was the last villain spawned,
             untouched: [],
-            number: 10,
             showing: {
                 numberOfFrames : 2
             }
@@ -76,10 +72,26 @@
             loop: true
         };
 
+        var Heart = {
+            src: './images/nodejs.png',
+            width: 500,
+            height: 500,
+            frame: 0,
+            spawnX: canvas.width - 60, // spawnsV at canvas width 1140px
+            step: 5,
+            untouched: [],
+            moving: {
+                numberOfFrames: 1
+            }
+        };
+
         // ========== Variables d'animation du canvas ====
         var looping = false;
         var totalSeconds = 0;
         var lastFrameTime = 0;
+        var spawnCpt = 0;
+        var spawnFrequency = 1250; // spawns villains every 1.25s
+        var lastSpawn =  0; // when was the last villain spawned,
 
         // =========== Request Animation Frame ===========
         window.requestAnimationFrame = window.requestAnimationFrame
@@ -93,6 +105,7 @@
             loadControls();
             loadCody();
             loadGameTheme();
+            loadHeart();
         }
 
         // ========== Chargement du background ==========
@@ -204,11 +217,17 @@
         }
 
         //========== Fonction de spawn des villains ==========
-        function spawnVillains() {
+        function spawnBonusAndVillains() {
             var time = Date.now();
-            if (time > (Villain.lastSpawn + Villain.spawnFrequency)) {
-                Villain.lastSpawn = time;
-                Villain.untouched.push(loadVillain());
+            if (time > (lastSpawn + spawnFrequency)) {
+                lastSpawn = time;
+                if(spawnCpt % 3 === 0) {
+                    Heart.untouched.push(loadHeart());
+
+                } else {
+                    Villain.untouched.push(loadVillain());
+                }
+                spawnCpt++;
             }
         }
         //========== Chargement de villain ==========
@@ -227,6 +246,25 @@
         // ========== Mouvement de villain ==========
         function villainMoving(villain) {
             villain.x -= Villain.step;
+        }
+
+
+        //========== Chargement de bonus ==========
+        function loadHeart() {
+            var heart = {}
+            heart.width = 60,
+            heart.height = 48,
+            heart.x = Heart.spawnX,
+            heart.y = Math.random() * (canvas.height - 100) + 50,
+            heart.frame = 0;
+            heart.image = new Image();
+            heart.image.src = Heart.src;
+            return heart;
+        }
+
+        // ========== Mouvement de villain ==========
+        function heartMoving(heart) {
+            heart.x -= Heart.step;
         }
 
         // ========== Détection de collisions ==========
@@ -300,7 +338,6 @@
             lastFrameTime = Date.now();
             requestAnimationFrame(loop);
             playTheme();
-            //addText();
         }
 
         // ========== Arrêt / Pause du jeu ==========
@@ -320,7 +357,7 @@
             var now = Date.now();
             totalSeconds += (now - lastFrameTime) / 1000;
             lastFrameTime = now;
-            spawnVillains();
+            spawnBonusAndVillains();
             loopBackground();
             loopBoky();
             loopCody();
@@ -328,6 +365,7 @@
             checkBokyLives();
             loopScoreText();
             loopObjectiveText();
+            loopHeart();
 
         }
 
@@ -385,6 +423,17 @@
                 context.drawImage(villain.image, villain.frame * Villain.width, 0, Villain.width, Villain.height, villain.x, villain.y, Villain.width, Villain.height);
                 villain.frame = (villain.frame + 1) % Villain.showing.numberOfFrames;
                 villainMoving(villain);
+            }
+        }
+
+        // ========== Répétition de l'affichage du bonus point Heart ==========
+        function loopHeart() {
+            for(var i = 0; i < Heart.untouched.length; i++) {
+                var heart = Heart.untouched[i];
+
+                context.drawImage(heart.image, heart.frame * Heart.width, 0, Heart.width, Heart.height, heart.x, heart.y, Heart.width, Heart.height);
+                Heart.frame = (heart.frame + 1) % Heart.moving.numberOfFrames;
+                heartMoving(heart);
             }
         }
 
