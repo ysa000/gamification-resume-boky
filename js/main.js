@@ -5,6 +5,10 @@
         var context = canvas.getContext('2d');
         canvas.width = 1140;
         canvas.height = 570;
+        context.font = '30px Helvetica';
+        //context.fillStyle = "magenta";
+        context.fillText('Score', canvas.width/2, canvas.height/2);
+
 
         // ========== Config ==========
         var background = {
@@ -296,6 +300,7 @@
             lastFrameTime = Date.now();
             requestAnimationFrame(loop);
             playTheme();
+            //addText();
         }
 
         // ========== Arrêt / Pause du jeu ==========
@@ -321,6 +326,8 @@
             loopCody();
             loopVillains();
             checkBokyLives();
+            loopScoreText();
+            loopObjectiveText();
 
         }
 
@@ -334,6 +341,21 @@
                 context.drawImage(background.image, i * background.image.width, 0);
             }
             context.restore();
+        }
+
+        function loopScoreText() {
+            context.font = '30px Arial';
+            if (boky.life === 0) {
+                context.font = '50px Arial';
+                context.fillText('GAME OVER', 400, 150);
+            } else {
+                context.fillText('Score : ' + boky.life, 500, 50);
+            }
+        }
+
+        function loopObjectiveText() {
+            context.font = '30px Arial';
+            context.fillText('Bonus : 0 / 10', 900, 50);
         }
 
         // ========== Répétition de l'affichage de Boky ==========
@@ -363,9 +385,6 @@
                 context.drawImage(villain.image, villain.frame * Villain.width, 0, Villain.width, Villain.height, villain.x, villain.y, Villain.width, Villain.height);
                 villain.frame = (villain.frame + 1) % Villain.showing.numberOfFrames;
                 villainMoving(villain);
-            }
-            if (boky.damaged === true) {
-
             }
         }
 
