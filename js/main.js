@@ -23,8 +23,16 @@
             attacking: {
                 numberOfFrames: 16
             },
+            hurt: {
+                numberOfFrames: 16
+            },
+            walking: {
+                numberOfFrames: 16
+            },
             direction: null,
-            damaged: false
+            damaged: 0,
+            touchedVillains: [],
+            life: 50
         };
 
         var cody = {
@@ -46,15 +54,12 @@
             width: 60,
             height: 65,
             frame: 0,
-            // x: 1080,
-            // y: 250,
-            // movingLeft: true,
             step: 5,
             spawnX: canvas.width - 60, // spawnsV at canvas width 1140px
             spawnFrequency: 1250, // spawns villains every 1.25s
             //spawnSpeed: 5, // sets how fast the villains move
             lastSpawn: 0, // when was the last villain spawned,
-            array: [],
+            untouched: [],
             number: 10,
             showing: {
                 numberOfFrames : 2
@@ -199,7 +204,7 @@
             var time = Date.now();
             if (time > (Villain.lastSpawn + Villain.spawnFrequency)) {
                 Villain.lastSpawn = time;
-                Villain.array.push(loadVillain());
+                Villain.untouched.push(loadVillain());
             }
         }
         //========== Chargement de villain ==========
@@ -266,17 +271,23 @@
             }
         }
 
-        // ========== Début / Reprise du jeu ==========
+        // ========== Détection de collision entre Boky et Villains, et comportement ==========
         function checkBokyLives() {
-            for (var i = 0; i < Villain.array.length; i++) {
+            for (var i = 0; i < Villain.untouched.length; i++) {
             // Parcourt le tableau de villains pour détecter s'il y a collision entre Boky et chaque villain
-                var collide = detectCollide(boky, Villain.array[i]);
+                var collide = detectCollide(boky, Villain.untouched[i]);
+                var removedVillain;
                 if (collide === true) {
-                    boky.damaged = true;
+                    boky.damaged = boky.hurt.numberOfFrames * 2;
+                    removedVillain = Villain.untouched.splice(i, 1)
+                    boky.touchedVillains.splice(-1, 0, removedVillain[0]);
+                    boky.life -= 10;
+                    if (boky.life <= 0) {
+                        bokyGame.stop();
+                    }
                 }
             }
         }
-
 
         // ========== Début / Reprise du jeu ==========
         function start() {
@@ -327,13 +338,13 @@
 
         // ========== Répétition de l'affichage de Boky ==========
         function loopBoky() {
-            if (boky.damaged === true) {
+            if (boky.damaged > 0) {
                 context.drawImage(boky.image, boky.frame * boky.width, 381, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
-                boky.frame = (boky.frame + 1) % boky.attacking.numberOfFrames;
-                boky.damaged = false;
+                boky.frame = (boky.frame + 1) % boky.hurt.numberOfFrames;
+                boky.damaged -= 1; // Permet l'affichage de l'état hurt de Boky pendant toute la collision
             } else {
-                context.drawImage(boky.image, boky.frame * boky.width, 0, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
-                boky.frame = (boky.frame + 1) % boky.attacking.numberOfFrames;
+                context.drawImage(boky.image, boky.frame * boky.width, 762, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
+                boky.frame = (boky.frame + 1) % boky.walking.numberOfFrames;
                 moveBoky();
             }
         }
@@ -347,11 +358,14 @@
 
         // ========== Répétition de l'affichage du villain ==========
         function loopVillains() {
-            for(var i = 0; i < Villain.array.length; i++) {
-                var villain = Villain.array[i];
+            for(var i = 0; i < Villain.untouched.length; i++) {
+                var villain = Villain.untouched[i];
                 context.drawImage(villain.image, villain.frame * Villain.width, 0, Villain.width, Villain.height, villain.x, villain.y, Villain.width, Villain.height);
                 villain.frame = (villain.frame + 1) % Villain.showing.numberOfFrames;
-            villainMoving(villain);
+                villainMoving(villain);
+            }
+            if (boky.damaged === true) {
+
             }
         }
 
