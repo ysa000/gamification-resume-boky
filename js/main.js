@@ -5,9 +5,6 @@
         var context = canvas.getContext('2d');
         canvas.width = 1140;
         canvas.height = 570;
-        context.font = '30px Helvetica';
-        //context.fillStyle = "magenta";
-        context.fillText('Score', canvas.width/2, canvas.height/2);
 
 
         // ========== Config ==========
@@ -57,7 +54,7 @@
             src: './images/sprite/villain-sprite.png',
             width: 60,
             height: 65,
-            spawnX: canvas.width - 60, // spawnsV at canvas width 1140px
+            spawnX: canvas.width - 60,
             frame: 0,
             step: 5,
             untouched: [],
@@ -73,11 +70,11 @@
         };
 
         var Heart = {
-            src: './images/nodejs.png',
-            width: 500,
-            height: 500,
+            src: './images/logos/github.png',
+            width: 60,
+            height: 68,
             frame: 0,
-            spawnX: canvas.width - 60, // spawnsV at canvas width 1140px
+            spawnX: canvas.width - 60,
             step: 5,
             untouched: [],
             moving: {
@@ -85,13 +82,55 @@
             }
         };
 
+        // ========== Constructeur d'un objet type (logos) ==========
+        function logo(name, src, width, height) {
+            this.name = name;
+            this.src = src;
+            this.width = width;
+            this.height = height;
+            this.spawnX = canvas.width - 60;
+            this.frame = 0;
+            this.step = 3;
+            this.numberOfFrames = 1;
+        }
+
+        // ========== Création de logos ==========
+        var htmlLogo = new logo('HTML5', './images/logos/html5.png', 60, 68);
+        var cssLogo = new logo('CSS3', './images/logos/html5.png', 60, 68);
+        var javascriptLogo = new logo('JavaScript', './images/logos/javascript.png', 60, 60);
+        var jqueryLogo = new logo('jQuery', './images/logos/jquery.png', 60, 60);
+        var angularLogo = new logo('AngularJS', './images/logos/angularjs.png', 60, 64)
+        var nodejsLogo = new logo('NodeJS', './images/logos/nodejs.png', 60, 68);
+        var mongodbLogo = new logo('MongoDB', './images/logos/mongodb.png', 27, 60);
+        var meteorLogo = new logo('Meteor', './images/logos/meteor.png', 60, 57);
+        var githugLogo = new logo('Github', './images/logos/github.png');
+
+        // ========== Stockage des logos dans un tableau ==========
+
+        var logoArray = [];
+        logoArray.push(
+            htmlLogo,
+            cssLogo,
+            javascriptLogo,
+            jqueryLogo,
+            angularLogo,
+            nodejsLogo,
+            mongodbLogo,
+            meteorLogo,
+            githugLogo
+        );
+
+        // ========== Stockage des logos qui n'ont pas été attrapés ==========
+
+        var untouchedLogos = [];
+
         // ========== Variables d'animation du canvas ====
         var looping = false;
         var totalSeconds = 0;
         var lastFrameTime = 0;
         var spawnCpt = 0;
-        var spawnFrequency = 1250; // spawns villains every 1.25s
-        var lastSpawn =  0; // when was the last villain spawned,
+        var spawnFrequency = 1250; // Fréquence de spawn (1.25s)
+        var lastSpawn =  0; // Quand le dernier élément a été spawné
 
         // =========== Request Animation Frame ===========
         window.requestAnimationFrame = window.requestAnimationFrame
@@ -105,7 +144,8 @@
             loadControls();
             loadCody();
             loadGameTheme();
-            loadHeart();
+            //loadHeart();
+            loadLogo();
         }
 
         // ========== Chargement du background ==========
@@ -222,8 +262,7 @@
             if (time > (lastSpawn + spawnFrequency)) {
                 lastSpawn = time;
                 if(spawnCpt % 3 === 0) {
-                    Heart.untouched.push(loadHeart());
-
+                    untouchedLogos.push(loadLogo());
                 } else {
                     Villain.untouched.push(loadVillain());
                 }
@@ -250,21 +289,43 @@
 
 
         //========== Chargement de bonus ==========
-        function loadHeart() {
-            var heart = {}
-            heart.width = 60,
-            heart.height = 48,
-            heart.x = Heart.spawnX,
-            heart.y = Math.random() * (canvas.height - 100) + 50,
-            heart.frame = 0;
-            heart.image = new Image();
-            heart.image.src = Heart.src;
-            return heart;
+        // function loadHeart() {
+        //     var heart = {}
+        //     heart.width = 60,
+        //     heart.height = 48,
+        //     heart.x = Heart.spawnX,
+        //     heart.y = Math.random() * (canvas.height - 100) + 50,
+        //     heart.frame = 0;
+        //     heart.image = new Image();
+        //     heart.image.src = Heart.src;
+        //     return heart;
+        // }
+
+        // // ========== Mouvement de villain ==========
+        // function heartMoving(heart) {
+        //     heart.x -= Heart.step;
+        // }
+
+        //========== Chargement des logos ==========
+        function loadLogo() {
+            var logo = {};
+            for (var i = 0; i <= logoArray.length; i++) {
+                logo.width = logoArray[i].width,
+                logo.height = logoArray[i].height,
+                logo.x = logoArray[i].spawnX,
+                logo.y = Math.random() * (canvas.height - 100) + 50,
+                logo.frame = logoArray.frame;
+                logo.image = new Image();
+                logo.image.src = logoArray[i].src;
+                return logo;
+            }
         }
 
-        // ========== Mouvement de villain ==========
-        function heartMoving(heart) {
-            heart.x -= Heart.step;
+        // ========== Mouvement des logos ==========
+        function logoMoving(logo) {
+            for (var i = 0; i <= untouchedLogos.length; i++) {
+                logo.x -= logoArray[i].step;
+            }
         }
 
         // ========== Détection de collisions ==========
@@ -365,7 +426,8 @@
             checkBokyLives();
             loopScoreText();
             loopObjectiveText();
-            loopHeart();
+            //loopHeart();
+            loopLogo();
 
         }
 
@@ -418,7 +480,7 @@
 
         // ========== Répétition de l'affichage du villain ==========
         function loopVillains() {
-            for(var i = 0; i < Villain.untouched.length; i++) {
+            for (var i = 0; i < Villain.untouched.length; i++) {
                 var villain = Villain.untouched[i];
                 context.drawImage(villain.image, villain.frame * Villain.width, 0, Villain.width, Villain.height, villain.x, villain.y, Villain.width, Villain.height);
                 villain.frame = (villain.frame + 1) % Villain.showing.numberOfFrames;
@@ -427,15 +489,28 @@
         }
 
         // ========== Répétition de l'affichage du bonus point Heart ==========
-        function loopHeart() {
-            for(var i = 0; i < Heart.untouched.length; i++) {
-                var heart = Heart.untouched[i];
+        // function loopHeart() {
+        //     for (var i = 0; i < Heart.untouched.length; i++) {
+        //         var heart = Heart.untouched[i];
 
-                context.drawImage(heart.image, heart.frame * Heart.width, 0, Heart.width, Heart.height, heart.x, heart.y, Heart.width, Heart.height);
-                Heart.frame = (heart.frame + 1) % Heart.moving.numberOfFrames;
-                heartMoving(heart);
+        //         context.drawImage(heart.image, heart.frame * Heart.width, 0, Heart.width, Heart.height, heart.x, heart.y, Heart.width, Heart.height);
+        //         Heart.frame = (heart.frame + 1) % Heart.moving.numberOfFrames;
+        //         heartMoving(heart);
+        //     }
+        // }
+
+        // ========== Répétition de l'affichage des logos ==========
+        function loopLogo() {
+            for (var i = 0; i < untouchedLogos.length; i++) {
+                var logo = untouchedLogos[i];
+                context.drawImage(logo.image, logoArray[i].frame * logo.width, 0, logo.width, logo.height, logo.x, logo.y, logo.width, logo.height);
+                logo.frame = (logoArray[i].frame + 1) % logoArray[i].numberOfFrames;
+                console.log(untouchedLogos[i]);
+                logoMoving(logo);
             }
+            //untouchedLogos++;
         }
+
 
         return {
             start: start,
