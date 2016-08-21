@@ -9,6 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="./images/favicon.ico">
 
+
     <title>Isabelle Yim</title>
 
     <!-- Bootstrap core CSS -->
@@ -19,6 +20,9 @@
 
     <!-- Custom styles for this template -->
     <link href="./styles/styles.css" rel="stylesheet">
+
+    <!-- Font Awesome CDN embed code -->
+    <script src="https://use.fontawesome.com/6bc632b7a9.js"></script>
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -63,7 +67,7 @@
             <p class="lead backgroundImg-text">Voici mon site, et tout le blabla qui va avec</p>
             <p class="lead">
               <a href="#a-propos" class="btn btn-lg btn-default">Découvrir</a>
-              <a href="cv_isabelle-yim.pdf" target="_blank" class="btn btn-lg btn-default">CV</a>
+              <a href="cv_isabelle-yim.pdf" target="_blank" class="btn btn-lg btn-default">Mon CV</a>
             </p>
           </div>
 
@@ -86,17 +90,16 @@
         <h2>Jeu HTML5 / JS</h2>
       </div>
       <p class="lead">Le projet comprend l'intégration d'un jeu développé en HTML 5 et JavaScript.</p>
-      <p class="lead">Boky est un glaçon volant avec un gros marteau. Il est friendly et gourmand. Il évolue dans un univers montagnard, et il a faim. Sur sa route, il cherche à manger, et il ne sera pas déçu, mais gare aux têtes de mort, qu'il ne digère pas bien.
-      Boky peut se déplacer vers en haut, en bas, avancer et reculer. Pour cela, il suffit d'utiliser les flèches du clavier.
-      Il doit manger tous les coeurs et les potions qu'il rencontrera. Si l'objectif est atteint, un nouveau bouton apparaîtra.</p>
-        <div id="canvasWrapper">
+      <p class="lead">Boky est un glaçon volant avec un gros marteau. Il est friendly et gourmand. Il évolue dans un univers montagnard, il a faim et aussi soif de connaissances. Lors de cette aventure, il pourra acquérir de nouvelles connaissances en collectant ce qu'il rencontrera sur sa route, mais gare aux têtes de mort, qu'il ne digère pas bien.</p>
+      <p class="lead">Boky peut se déplacer en haut, en bas, avancer et reculer, en utilisant les flèches du clavier.</p>
+        <!-- Canvas wrap-->
+        <div>
           <canvas id="canvas"></canvas>
           <button id="btnStart" class="btn btn-sm gameBtn">Play</button>
           <button id="btnStop" class="btn btn-sm gameBtn">Stop</button>
           <button id="btnMute" class="btn btn-sm gameBtn">Mute</button>
-        </div> <!-- /Section Jeu -->
-      </div> <!-- /Canvas wrap-->
-
+        </div> <!-- /Canvas wrap -->
+      </div> <!-- /Section Jeu -->
 
     <!-- Section Parcours -->
     <div id="parcours" class="container">
@@ -111,6 +114,7 @@
         proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
       <div class="panel-group" id="accordion">
+
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
@@ -125,6 +129,7 @@
             commodo consequat.</div>
           </div>
         </div>
+
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
@@ -139,6 +144,7 @@
             commodo consequat.</div>
           </div>
         </div>
+
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
@@ -153,6 +159,7 @@
             commodo consequat.</div>
           </div>
         </div>
+
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
@@ -167,6 +174,7 @@
             commodo consequat.</div>
           </div>
         </div>
+
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
@@ -181,6 +189,7 @@
             commodo consequat.</div>
           </div>
         </div>
+
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
@@ -195,6 +204,7 @@
             commodo consequat.</div>
           </div>
         </div>
+
       </div>
 
         <a class="btn btn-default" href="cv_isabelle-yim.pdf" role="button" target="_blank">Mon CV</a>
@@ -202,7 +212,15 @@
 
     <footer class="footer">
       <div class="container">
-        <p class="text-muted"><i class="fa fa-heart" aria-hidden="true"></i>Built by <a href="https://twitter.com/IsabelleYim" title="twitter-isabelle-yim" target="_blank">@IsabelleYim</a> - 2016</p>
+        <div class="social text-center">
+          <a href="mailto:isabelle.yim@gmail.com?subject=contact" title="Gmail"><i class="fa fa-envelope-o fa-lg" aria-hidden="true"></i></a>
+          <a href="https://fr.linkedin.com/in/isabelleyim" title="LinkedIn" target="_blank"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a>
+          <a href="cv_isabelle-yim.pdf" title="resume" target="_blank"><i class="fa fa-file-text-o fa-lg" aria-hidden="true"></i></a>
+          <a href="https://twitter.com/IsabelleYim" title="Twitter" target="_blank"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a>
+          <a href="https://github.com/ysa000" title="Github" target="_blank"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a>
+          <a href="https://www.instagram.com/ysa_000/" title="Instagram" target="_blank"><i class="fa fa-instagram fa-lg" aria-hidden="true"></i></a>
+        </div>
+        <p class="text-muted text-center">Isabelle Yim - 2016</p>
       </div>
     </footer>
 
