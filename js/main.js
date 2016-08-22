@@ -9,7 +9,7 @@
 
         // ========== Config ==========
         var background = {
-            src: './images/background/resized-mountain-full-bg.jpg',
+            src: './images/background/forest-resized-full-background.jpg',
             motion: 300
         };
 
@@ -27,13 +27,17 @@
             hurt: {
                 numberOfFrames: 16
             },
+            happy: {
+                numberOfFrames: 24
+            },
             walking: {
                 numberOfFrames: 16
             },
             direction: null,
             damaged: 0,
             touchedVillains: [],
-            life: 50
+            life: 30,
+            bonus: 0
         };
 
         var cody = {
@@ -90,25 +94,24 @@
             this.height = height;
             this.spawnX = canvas.width - 60;
             this.frame = 0;
-            this.step = 3;
+            this.step = 5;
             this.numberOfFrames = 1;
         }
 
         // ========== Création de logos ==========
         var htmlLogo = new logo('HTML5', './images/logos/html5.png', 60, 68);
-        var cssLogo = new logo('CSS3', './images/logos/html5.png', 60, 68);
+        var cssLogo = new logo('CSS3', './images/logos/css3.png', 60, 68);
         var javascriptLogo = new logo('JavaScript', './images/logos/javascript.png', 60, 60);
         var jqueryLogo = new logo('jQuery', './images/logos/jquery.png', 60, 60);
         var angularLogo = new logo('AngularJS', './images/logos/angularjs.png', 60, 64)
         var nodejsLogo = new logo('NodeJS', './images/logos/nodejs.png', 60, 68);
         var mongodbLogo = new logo('MongoDB', './images/logos/mongodb.png', 27, 60);
         var meteorLogo = new logo('Meteor', './images/logos/meteor.png', 60, 57);
-        var githugLogo = new logo('Github', './images/logos/github.png');
+        var githugLogo = new logo('Github', './images/logos/github.png', 60, 60);
 
         // ========== Stockage des logos dans un tableau ==========
 
-        var logoArray = [];
-        logoArray.push(
+        var logoArray = [
             htmlLogo,
             cssLogo,
             javascriptLogo,
@@ -118,11 +121,12 @@
             mongodbLogo,
             meteorLogo,
             githugLogo
-        );
+        ];
 
-        // ========== Stockage des logos qui n'ont pas été attrapés ==========
+        // ========== Stockage des logos ==========
 
-        var untouchedLogos = [];
+        var untouchedLogos = []; // qui n'ont pas été attrapés
+        var touchedLogos = []; // qui ont été attrapés
 
         // ========== Variables d'animation du canvas ====
         var looping = false;
@@ -145,7 +149,6 @@
             loadCody();
             loadGameTheme();
             //loadHeart();
-            loadLogo();
         }
 
         // ========== Chargement du background ==========
@@ -261,8 +264,8 @@
             var time = Date.now();
             if (time > (lastSpawn + spawnFrequency)) {
                 lastSpawn = time;
-                if(spawnCpt % 3 === 0) {
-                    untouchedLogos.push(loadLogo());
+                if(spawnCpt % 3 === 0 && untouchedLogos.length < logoArray.length) {
+                    untouchedLogos.push(loadLogo(untouchedLogos.length));
                 } else {
                     Villain.untouched.push(loadVillain());
                 }
@@ -307,25 +310,23 @@
         // }
 
         //========== Chargement des logos ==========
-        function loadLogo() {
+        function loadLogo(i) {
             var logo = {};
-            for (var i = 0; i <= logoArray.length; i++) {
-                logo.width = logoArray[i].width,
-                logo.height = logoArray[i].height,
-                logo.x = logoArray[i].spawnX,
-                logo.y = Math.random() * (canvas.height - 100) + 50,
-                logo.frame = logoArray.frame;
-                logo.image = new Image();
-                logo.image.src = logoArray[i].src;
-                return logo;
-            }
+            logo.width = logoArray[i].width;
+            logo.height = logoArray[i].height;
+            logo.x = logoArray[i].spawnX;
+            logo.y = Math.random() * (canvas.height - 100) + 50;
+            logo.frame = logoArray[i].frame;
+            logo.step = logoArray[i].step;
+            logo.numberOfFrames = logoArray[i].numberOfFrames;
+            logo.image = new Image();
+            logo.image.src = logoArray[i].src;
+            return logo;
         }
 
         // ========== Mouvement des logos ==========
         function logoMoving(logo) {
-            for (var i = 0; i <= untouchedLogos.length; i++) {
-                logo.x -= logoArray[i].step;
-            }
+            logo.x -= logo.step;
         }
 
         // ========== Détection de collisions ==========
@@ -378,19 +379,36 @@
         function checkBokyLives() {
             for (var i = 0; i < Villain.untouched.length; i++) {
             // Parcourt le tableau de villains pour détecter s'il y a collision entre Boky et chaque villain
-                var collide = detectCollide(boky, Villain.untouched[i]);
+                var collideVillain = detectCollide(boky, Villain.untouched[i]);
                 var removedVillain;
-                if (collide === true) {
+                if (collideVillain === true) {
                     boky.damaged = boky.hurt.numberOfFrames * 2;
-                    removedVillain = Villain.untouched.splice(i, 1)
+                    removedVillain = Villain.untouched.splice(i, 1);
                     boky.touchedVillains.splice(-1, 0, removedVillain[0]);
                     boky.life -= 10;
                     if (boky.life <= 0) {
-                        bokyGame.stop();
+                        setTimeout(bokyGame.stop, 500);
                     }
                 }
             }
         }
+
+        // function checkBokyBonus() {
+        //     for (var i = 0; i < untouchedLogos.length; i++) {
+        //         var collideLogo = detectCollide(boky, untouchedLogos[i]);
+        //         var removedLogo = [];
+        //         //var touchedLogo = [];
+        //         if (collideLogo === true) {
+        //             boky.bonus = boky.happy.numberOfFrames * 2;
+        //             removedLogo = untouchedLogos.splice(i, 1);
+        //             touchedLogos.splice(-1, 0, removedLogo[0]);
+        //             boky.bonus += 1;
+        //             if (boky.bonus >= 9) {
+        //                 bokyGame.stop();
+        //             }
+        //         }
+        //     }
+        // }
 
         // ========== Début / Reprise du jeu ==========
         function start() {
@@ -424,6 +442,7 @@
             loopCody();
             loopVillains();
             checkBokyLives();
+            //checkBokyBonus();
             loopScoreText();
             loopObjectiveText();
             //loopHeart();
@@ -455,7 +474,12 @@
 
         function loopObjectiveText() {
             context.font = '30px Arial';
-            context.fillText('Bonus : 0 / 10', 900, 50);
+            if (boky.bonus === 9) {
+                context.font = '50px Arial';
+                context.fillText('YOU WIN', 400, 150);
+            } else {
+                context.fillText('Bonus : ' + boky.bonus + ' / 10', 900, 50);
+            }
         }
 
         // ========== Répétition de l'affichage de Boky ==========
@@ -464,6 +488,10 @@
                 context.drawImage(boky.image, boky.frame * boky.width, 381, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
                 boky.frame = (boky.frame + 1) % boky.hurt.numberOfFrames;
                 boky.damaged -= 1; // Permet l'affichage de l'état hurt de Boky pendant toute la collision
+            } else if (boky.bonus > 0) {
+                context.drawImage(boky.image, boky.frame * boky.width, 508, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
+                boky.frame = (boky.frame + 1) % boky.happy.numberOfFrames;
+                boky.bonus -= 1;
             } else {
                 context.drawImage(boky.image, boky.frame * boky.width, 762, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
                 boky.frame = (boky.frame + 1) % boky.walking.numberOfFrames;
@@ -503,9 +531,8 @@
         function loopLogo() {
             for (var i = 0; i < untouchedLogos.length; i++) {
                 var logo = untouchedLogos[i];
-                context.drawImage(logo.image, logoArray[i].frame * logo.width, 0, logo.width, logo.height, logo.x, logo.y, logo.width, logo.height);
-                logo.frame = (logoArray[i].frame + 1) % logoArray[i].numberOfFrames;
-                console.log(untouchedLogos[i]);
+                context.drawImage(logo.image, logo.frame * logo.width, 0, logo.width, logo.height, logo.x, logo.y, logo.width, logo.height);
+                logo.frame = (logo.frame + 1) % logo.numberOfFrames;
                 logoMoving(logo);
             }
             //untouchedLogos++;
