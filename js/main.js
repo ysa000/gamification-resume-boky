@@ -9,8 +9,9 @@
 
         // ========== Config ==========
         var background = {
-            src: './images/background/forest-resized-full-background.jpg',
-            motion: 300
+            src: './images/background/resized-mountain-full-bg.jpg',
+            motion: 300,
+            groundSize: 70
         };
 
         var boky = {
@@ -136,7 +137,7 @@
             loadBoky();
             loadControls();
             loadCody();
-            loadGameTheme();
+            //loadGameTheme();
             //loadHeart();
         }
 
@@ -205,7 +206,7 @@
                 }
             }
             function moveBokyDown() {
-                if (boky.y <= (canvas.height - boky.height - boky.step)) {
+                if (boky.y <= (canvas.height - (boky.height - boky.step + background.groundSize + 20))) { // 90px supp pour limiter la hauteur min de déplacement de Boky
                     boky.y += boky.step;
                 }
             }
@@ -242,7 +243,7 @@
 
             if (cody.flyingUp === false && cody.y <= canvas.height - cody.height) {
                 cody.y += cody.step;
-                if (cody.y >= (canvas.height - cody.height)) {
+                if (cody.y >= (canvas.height - cody.height - background.groundSize)) {
                     cody.flyingUp = true;
                 }
             }
@@ -268,7 +269,7 @@
             villain.width = 60,
             villain.height = 65,
             villain.x = Villain.spawnX,
-            villain.y = Math.random() * (canvas.height - 100) + 50,
+            villain.y = Math.random() * (canvas.height - 100 - background.groundSize) + 50,
             villain.frame = 0;
             villain.image = new Image();
             villain.image.src = Villain.src;
@@ -286,7 +287,7 @@
             logo.width = logoArray[i].width;
             logo.height = logoArray[i].height;
             logo.x = logoArray[i].spawnX;
-            logo.y = Math.random() * (canvas.height - 100) + 50;
+            logo.y = Math.random() * (canvas.height - 100 - background.groundSize) + 50;
             logo.frame = logoArray[i].frame;
             logo.step = logoArray[i].step;
             logo.numberOfFrames = logoArray[i].numberOfFrames;
@@ -366,7 +367,7 @@
         // ========== Détection de collision entre Boky et logos, et comportement ==========
         function checkBokyBonus() {
             for (var i = 0; i < untouchedLogos.length; i++) {
-                // Parcourt le tableau de logos pour détecters'il y a collision entre Boky et chaque logo
+                // Parcourt le tableau de logos pour détecter s'il y a collision entre Boky et chaque logo
                 var collideLogo = detectCollide(boky, untouchedLogos[i]);
                 if (collideLogo === true) {
                     boky.bonusAnimation = boky.happy.numberOfFrames * 2;
