@@ -302,9 +302,22 @@
         }
 
         // ========== Détection de collisions ==========
+        // function detectCollide(obj1, obj2) {
+        //     if (obj1.x < obj2.x + obj2.width && // posX Boky < posX Villain + width Villain
+        //         obj1.x + obj1.width > obj2.x &&
+        //         obj1.y < obj2.y + obj2.height &&
+        //         obj1.height + obj1.y > obj2.y) {
+        //         // >>>>> Collision détectée
+        //         return true;
+        //     } else {
+        //         // >>>>> Pas de collision détectée
+        //         return false;
+        //     }
+        // }
+
         function detectCollide(obj1, obj2) {
-            if (obj1.x < obj2.x + obj2.width && // posX Boky < posX Villain + width Villain
-                obj1.x + obj1.width > obj2.x &&
+            if (obj1.x < obj2.x && // posX Boky < posX Villain + width Villain
+                obj1.x + obj1.width > obj2.x + obj2.width &&
                 obj1.y < obj2.y + obj2.height &&
                 obj1.height + obj1.y > obj2.y) {
                 // >>>>> Collision détectée
@@ -477,7 +490,6 @@
             context.drawImage(cody.image, cody.frame * cody.width, 0, cody.width, cody.height, cody.x, cody.y, cody.width, cody.height);
             cody.frame = (cody.frame + 1) % cody.flying.numberOfFrames;
         }
-
         // ========== Répétition de l'affichage du villain ==========
         function loopVillains() {
             for (var i = 0; i < Villain.untouched.length; i++) {
