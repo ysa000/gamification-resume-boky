@@ -36,8 +36,10 @@
             direction: null,
             damaged: 0,
             touchedVillains: [],
+            touchedLogos: [],
             life: 30,
-            bonus: 0
+            bonusAnimation: 0,
+            score: 0
         };
 
         var cody = {
@@ -58,7 +60,7 @@
             src: './images/sprite/villain-sprite.png',
             width: 60,
             height: 65,
-            spawnX: canvas.width - 60,
+            spawnX: canvas.width,
             frame: 0,
             step: 5,
             untouched: [],
@@ -73,26 +75,13 @@
             loop: true
         };
 
-        var Heart = {
-            src: './images/logos/github.png',
-            width: 60,
-            height: 68,
-            frame: 0,
-            spawnX: canvas.width - 60,
-            step: 5,
-            untouched: [],
-            moving: {
-                numberOfFrames: 1
-            }
-        };
-
         // ========== Constructeur d'un objet type (logos) ==========
         function logo(name, src, width, height) {
             this.name = name;
             this.src = src;
             this.width = width;
             this.height = height;
-            this.spawnX = canvas.width - 60;
+            this.spawnX = canvas.width;
             this.frame = 0;
             this.step = 5;
             this.numberOfFrames = 1;
@@ -126,13 +115,13 @@
         // ========== Stockage des logos ==========
 
         var untouchedLogos = []; // qui n'ont pas été attrapés
-        var touchedLogos = []; // qui ont été attrapés
 
         // ========== Variables d'animation du canvas ====
         var looping = false;
         var totalSeconds = 0;
         var lastFrameTime = 0;
         var spawnCpt = 0;
+        var spawnBonusCpt = 0;
         var spawnFrequency = 1250; // Fréquence de spawn (1.25s)
         var lastSpawn =  0; // Quand le dernier élément a été spawné
 
@@ -264,8 +253,9 @@
             var time = Date.now();
             if (time > (lastSpawn + spawnFrequency)) {
                 lastSpawn = time;
-                if(spawnCpt % 3 === 0 && untouchedLogos.length < logoArray.length) {
-                    untouchedLogos.push(loadLogo(untouchedLogos.length));
+                if(spawnCpt % 3 === 0 && spawnBonusCpt < logoArray.length) {
+                    untouchedLogos.push(loadLogo(spawnBonusCpt));
+                    spawnBonusCpt++;
                 } else {
                     Villain.untouched.push(loadVillain());
                 }
@@ -289,25 +279,6 @@
         function villainMoving(villain) {
             villain.x -= Villain.step;
         }
-
-
-        //========== Chargement de bonus ==========
-        // function loadHeart() {
-        //     var heart = {}
-        //     heart.width = 60,
-        //     heart.height = 48,
-        //     heart.x = Heart.spawnX,
-        //     heart.y = Math.random() * (canvas.height - 100) + 50,
-        //     heart.frame = 0;
-        //     heart.image = new Image();
-        //     heart.image.src = Heart.src;
-        //     return heart;
-        // }
-
-        // // ========== Mouvement de villain ==========
-        // function heartMoving(heart) {
-        //     heart.x -= Heart.step;
-        // }
 
         //========== Chargement des logos ==========
         function loadLogo(i) {
@@ -380,11 +351,10 @@
             for (var i = 0; i < Villain.untouched.length; i++) {
             // Parcourt le tableau de villains pour détecter s'il y a collision entre Boky et chaque villain
                 var collideVillain = detectCollide(boky, Villain.untouched[i]);
-                var removedVillain;
                 if (collideVillain === true) {
                     boky.damaged = boky.hurt.numberOfFrames * 2;
-                    removedVillain = Villain.untouched.splice(i, 1);
-                    boky.touchedVillains.splice(-1, 0, removedVillain[0]);
+                    var removedVillain = Villain.untouched.splice(i, 1);
+                    boky.touchedVillains.push(removedVillain[0]);
                     boky.life -= 10;
                     if (boky.life <= 0) {
                         setTimeout(bokyGame.stop, 500);
@@ -393,22 +363,22 @@
             }
         }
 
-        // function checkBokyBonus() {
-        //     for (var i = 0; i < untouchedLogos.length; i++) {
-        //         var collideLogo = detectCollide(boky, untouchedLogos[i]);
-        //         var removedLogo = [];
-        //         //var touchedLogo = [];
-        //         if (collideLogo === true) {
-        //             boky.bonus = boky.happy.numberOfFrames * 2;
-        //             removedLogo = untouchedLogos.splice(i, 1);
-        //             touchedLogos.splice(-1, 0, removedLogo[0]);
-        //             boky.bonus += 1;
-        //             if (boky.bonus >= 9) {
-        //                 bokyGame.stop();
-        //             }
-        //         }
-        //     }
-        // }
+        // ========== Détection de collision entre Boky et logos, et comportement ==========
+        function checkBokyBonus() {
+            for (var i = 0; i < untouchedLogos.length; i++) {
+                // Parcourt le tableau de logos pour détecters'il y a collision entre Boky et chaque logo
+                var collideLogo = detectCollide(boky, untouchedLogos[i]);
+                if (collideLogo === true) {
+                    boky.bonusAnimation = boky.happy.numberOfFrames * 2;
+                    var removedLogo = untouchedLogos.splice(i, 1);
+                    boky.touchedLogos.push(removedLogo[0]);
+                    boky.score += 1;
+                    if (boky.score == 9) {
+                        setTimeout(bokyGame.stop, 500);
+                    }
+                }
+            }
+        }
 
         // ========== Début / Reprise du jeu ==========
         function start() {
@@ -442,7 +412,7 @@
             loopCody();
             loopVillains();
             checkBokyLives();
-            //checkBokyBonus();
+            checkBokyBonus();
             loopScoreText();
             loopObjectiveText();
             //loopHeart();
@@ -474,11 +444,11 @@
 
         function loopObjectiveText() {
             context.font = '30px Arial';
-            if (boky.bonus === 9) {
+            if (boky.score === 9) {
                 context.font = '50px Arial';
                 context.fillText('YOU WIN', 400, 150);
             } else {
-                context.fillText('Bonus : ' + boky.bonus + ' / 10', 900, 50);
+                context.fillText('Score : ' + boky.score + ' / 10', 900, 50);
             }
         }
 
@@ -488,10 +458,11 @@
                 context.drawImage(boky.image, boky.frame * boky.width, 381, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
                 boky.frame = (boky.frame + 1) % boky.hurt.numberOfFrames;
                 boky.damaged -= 1; // Permet l'affichage de l'état hurt de Boky pendant toute la collision
-            } else if (boky.bonus > 0) {
+            } else if (boky.bonusAnimation > 0) {
                 context.drawImage(boky.image, boky.frame * boky.width, 508, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
                 boky.frame = (boky.frame + 1) % boky.happy.numberOfFrames;
-                boky.bonus -= 1;
+                boky.bonusAnimation -= 1;
+                moveBoky();
             } else {
                 context.drawImage(boky.image, boky.frame * boky.width, 762, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
                 boky.frame = (boky.frame + 1) % boky.walking.numberOfFrames;
@@ -516,17 +487,6 @@
             }
         }
 
-        // ========== Répétition de l'affichage du bonus point Heart ==========
-        // function loopHeart() {
-        //     for (var i = 0; i < Heart.untouched.length; i++) {
-        //         var heart = Heart.untouched[i];
-
-        //         context.drawImage(heart.image, heart.frame * Heart.width, 0, Heart.width, Heart.height, heart.x, heart.y, Heart.width, Heart.height);
-        //         Heart.frame = (heart.frame + 1) % Heart.moving.numberOfFrames;
-        //         heartMoving(heart);
-        //     }
-        // }
-
         // ========== Répétition de l'affichage des logos ==========
         function loopLogo() {
             for (var i = 0; i < untouchedLogos.length; i++) {
@@ -535,9 +495,7 @@
                 logo.frame = (logo.frame + 1) % logo.numberOfFrames;
                 logoMoving(logo);
             }
-            //untouchedLogos++;
         }
-
 
         return {
             start: start,
