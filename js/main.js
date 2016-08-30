@@ -96,6 +96,7 @@
         var angularLogo = new logo('AngularJS', './images/logos/angularjs.png', 60, 64)
         var nodejsLogo = new logo('NodeJS', './images/logos/nodejs.png', 60, 68);
         var mongodbLogo = new logo('MongoDB', './images/logos/mongodb.png', 27, 60);
+        var expressLogo = new logo('ExpressJS', './images/logos/express.png', 60, 60);
         var meteorLogo = new logo('Meteor', './images/logos/meteor.png', 60, 57);
         var githugLogo = new logo('Github', './images/logos/github.png', 60, 60);
 
@@ -109,6 +110,7 @@
             angularLogo,
             nodejsLogo,
             mongodbLogo,
+            expressLogo,
             meteorLogo,
             githugLogo
         ];
