@@ -1,9 +1,15 @@
 (function() {
     function Game(canvas) {
 
-    	// ========== Config ==========
+        // ========== Config du canvas ==========
+        var context = canvas.getContext('2d');
+        canvas.width = 1140;
+        canvas.height = 570;
+
+
+        // ========== Config ==========
         var background = {
-            src: './images/background/resized-mountain-full-bg.jpg',
+            src: './images/background/forest-resized-full-background.jpg',
             motion: 300
         };
 
@@ -18,7 +24,22 @@
             attacking: {
                 numberOfFrames: 16
             },
-            direction: null
+            hurt: {
+                numberOfFrames: 16
+            },
+            happy: {
+                numberOfFrames: 24
+            },
+            walking: {
+                numberOfFrames: 16
+            },
+            direction: null,
+            damaged: 0,
+            touchedVillains: [],
+            touchedLogos: [],
+            life: 30,
+            bonusAnimation: 0,
+            score: 0
         };
 
         var cody = {
@@ -35,19 +56,14 @@
             }
         };
 
-        var villain = {
+        var Villain = {
             src: './images/sprite/villain-sprite.png',
             width: 60,
             height: 65,
+            spawnX: canvas.width,
             frame: 0,
-            x: 1080,
-            y: 250,
-            movingLeft: true,
             step: 5,
-            spawnX: canvas.width, // spawns villains at canvas width 1140px
-            spawnFrequency: 1250, // spawns villains every 1.75s
-            spawnSpeed: 5, // sets how fast the villains will be spawned
-            lastSpawn: -1, // when was the last villain spawned
+            untouched: [],
             showing: {
                 numberOfFrames : 2
             }
@@ -55,17 +71,59 @@
 
         var gameTheme = {
             src: './music/Xingu%20Loop.wav',
+            playing: true,
+            loop: true
         };
 
-        // ========== Config du canvas ==========
-        var context = canvas.getContext('2d');
-        canvas.width = 1140;
-        canvas.height = 570;
+        // ========== Constructeur d'un objet type (logos) ==========
+        function logo(name, src, width, height) {
+            this.name = name;
+            this.src = src;
+            this.width = width;
+            this.height = height;
+            this.spawnX = canvas.width;
+            this.frame = 0;
+            this.step = 5;
+            this.numberOfFrames = 1;
+        }
+
+        // ========== Création de logos ==========
+        var htmlLogo = new logo('HTML5', './images/logos/html5.png', 60, 68);
+        var cssLogo = new logo('CSS3', './images/logos/css3.png', 60, 68);
+        var javascriptLogo = new logo('JavaScript', './images/logos/javascript.png', 60, 60);
+        var jqueryLogo = new logo('jQuery', './images/logos/jquery.png', 60, 60);
+        var angularLogo = new logo('AngularJS', './images/logos/angularjs.png', 60, 64)
+        var nodejsLogo = new logo('NodeJS', './images/logos/nodejs.png', 60, 68);
+        var mongodbLogo = new logo('MongoDB', './images/logos/mongodb.png', 27, 60);
+        var meteorLogo = new logo('Meteor', './images/logos/meteor.png', 60, 57);
+        var githugLogo = new logo('Github', './images/logos/github.png', 60, 60);
+
+        // ========== Stockage des logos dans un tableau ==========
+
+        var logoArray = [
+            htmlLogo,
+            cssLogo,
+            javascriptLogo,
+            jqueryLogo,
+            angularLogo,
+            nodejsLogo,
+            mongodbLogo,
+            meteorLogo,
+            githugLogo
+        ];
+
+        // ========== Stockage des logos ==========
+
+        var untouchedLogos = []; // qui n'ont pas été attrapés
 
         // ========== Variables d'animation du canvas ====
         var looping = false;
         var totalSeconds = 0;
         var lastFrameTime = 0;
+        var spawnCpt = 0;
+        var spawnBonusCpt = 0;
+        var spawnFrequency = 1250; // Fréquence de spawn (1.25s)
+        var lastSpawn =  0; // Quand le dernier élément a été spawné
 
         // =========== Request Animation Frame ===========
         window.requestAnimationFrame = window.requestAnimationFrame
@@ -73,15 +131,13 @@
                 || window.mozRequestAnimationFrame
                 || function(callback) { window.setTimeout(callback, 1000 / 60); };
 
-
         function loadGame() {
             loadBackground();
             loadBoky();
             loadControls();
             loadCody();
-            loadVillain();
             loadGameTheme();
-            // spawnVillains();
+            //loadHeart();
         }
 
         // ========== Chargement du background ==========
@@ -192,39 +248,65 @@
             }
         }
 
-        // ========== Chargement du villain ==========
-        function loadVillain() {
-            villain.image = new Image();
-            villain.image.onload = function() {
-                loopVillain(0);
-            };
-            villain.image.src = villain.src;
-        }
-
-        // ========== Mouvement villain qui traverse la width du canvas de droite à gauche ==========
-        function villainMoving() {
-            // console.log(villain.movingRight); // false
-            // console.log(villain.x); // 1080
-            if (villain.movingLeft && villain.x >= 0) {
-                villain.x -= villain.step;
-                if (villain.x <= 0) {
-                    villain.movingLeft = false;
+        //========== Fonction de spawn des villains ==========
+        function spawnBonusAndVillains() {
+            var time = Date.now();
+            if (time > (lastSpawn + spawnFrequency)) {
+                lastSpawn = time;
+                if(spawnCpt % 3 === 0 && spawnBonusCpt < logoArray.length) {
+                    untouchedLogos.push(loadLogo(spawnBonusCpt));
+                    spawnBonusCpt++;
+                } else {
+                    Villain.untouched.push(loadVillain());
                 }
+                spawnCpt++;
             }
         }
+        //========== Chargement de villain ==========
+        function loadVillain() {
+            var villain = {}
+            villain.width = 60,
+            villain.height = 65,
+            villain.x = Villain.spawnX,
+            villain.y = Math.random() * (canvas.height - 100) + 50,
+            villain.frame = 0;
+            villain.image = new Image();
+            villain.image.src = Villain.src;
+            return villain;
+        }
 
-        // ========== Gestionnaire d'affichage aléatoire des villains ==========
+        // ========== Mouvement de villain ==========
+        function villainMoving(villain) {
+            villain.x -= Villain.step;
+        }
 
+        //========== Chargement des logos ==========
+        function loadLogo(i) {
+            var logo = {};
+            logo.width = logoArray[i].width;
+            logo.height = logoArray[i].height;
+            logo.x = logoArray[i].spawnX;
+            logo.y = Math.random() * (canvas.height - 100) + 50;
+            logo.frame = logoArray[i].frame;
+            logo.step = logoArray[i].step;
+            logo.numberOfFrames = logoArray[i].numberOfFrames;
+            logo.image = new Image();
+            logo.image.src = logoArray[i].src;
+            return logo;
+        }
 
+        // ========== Mouvement des logos ==========
+        function logoMoving(logo) {
+            logo.x -= logo.step;
+        }
 
         // ========== Détection de collisions ==========
         function detectCollide(obj1, obj2) {
-            if (obj1.x < obj2.x + obj2.width &&
+            if (obj1.x < obj2.x + obj2.width && // posX Boky < posX Villain + width Villain
                 obj1.x + obj1.width > obj2.x &&
                 obj1.y < obj2.y + obj2.height &&
                 obj1.height + obj1.y > obj2.y) {
                 // >>>>> Collision détectée
-                console.log('Touché !');
                 return true;
             } else {
                 // >>>>> Pas de collision détectée
@@ -232,25 +314,88 @@
             }
         }
 
-        // ========== Chargement de la musique du jeu
+        // ========== Chargement de la musique du jeu ==========
         function loadGameTheme() {
-            gameTheme.audio = new Audio('./music/Brave%20World.wav');
-            gameTheme.audio.onload = function() {
-                loopGameTheme();
-            };
+            gameTheme.audio = new Audio();
+            gameTheme.audio.src = gameTheme.src;
+            gameTheme.audio.loop = gameTheme.loop;
+            if (gameTheme.playing) {
+                gameTheme.audio.play();
+            }
         }
 
+        // ========== Lance le game theme ==========
+        function playTheme() {
+            gameTheme.audio.play();
+        }
+
+        // ========== Arrête le game theme ==========
+        function stopTheme() {
+            gameTheme.audio.pause();
+        }
+
+        // ========== Mute/unmute le game theme ==========
+        function toggleMuteTheme() {
+            var muteBtn = document.getElementById('btnMute');
+            if (gameTheme.audio.muted === true) {
+                gameTheme.audio.muted = false;
+                muteBtn.innerHTML = 'Mute';
+            } else {
+                gameTheme.audio.muted = true;
+                muteBtn.innerHTML = 'Unmute';
+            }
+        }
+
+        // ========== Détection de collision entre Boky et Villains, et comportement ==========
+        function checkBokyLives() {
+            for (var i = 0; i < Villain.untouched.length; i++) {
+            // Parcourt le tableau de villains pour détecter s'il y a collision entre Boky et chaque villain
+                var collideVillain = detectCollide(boky, Villain.untouched[i]);
+                if (collideVillain === true) {
+                    boky.damaged = boky.hurt.numberOfFrames * 2;
+                    var removedVillain = Villain.untouched.splice(i, 1);
+                    boky.touchedVillains.push(removedVillain[0]);
+                    boky.life -= 10;
+                    if (boky.life <= 0) {
+                        setTimeout(bokyGame.stop, 500);
+                    }
+                }
+            }
+        }
+
+        // ========== Détection de collision entre Boky et logos, et comportement ==========
+        function checkBokyBonus() {
+            for (var i = 0; i < untouchedLogos.length; i++) {
+                // Parcourt le tableau de logos pour détecters'il y a collision entre Boky et chaque logo
+                var collideLogo = detectCollide(boky, untouchedLogos[i]);
+                if (collideLogo === true) {
+                    boky.bonusAnimation = boky.happy.numberOfFrames * 2;
+                    var removedLogo = untouchedLogos.splice(i, 1);
+                    boky.touchedLogos.push(removedLogo[0]);
+                    boky.score += 1;
+                    if (boky.score == 9) {
+                        setTimeout(bokyGame.stop, 500);
+                    }
+                }
+            }
+        }
+
+        // ========== Début / Reprise du jeu ==========
         function start() {
             if(looping) return;
             looping = true;
             lastFrameTime = Date.now();
             requestAnimationFrame(loop);
+            playTheme();
         }
 
+        // ========== Arrêt / Pause du jeu ==========
         function stop() {
             looping = false;
+            stopTheme();
         }
 
+        // ========== Boucle les animations du jeu ==========
         function loop() {
             if (!looping) {
                 return;
@@ -261,32 +406,68 @@
             var now = Date.now();
             totalSeconds += (now - lastFrameTime) / 1000;
             lastFrameTime = now;
+            spawnBonusAndVillains();
             loopBackground();
             loopBoky();
             loopCody();
-            loopVillain();
-            //loopGameTheme();
-            var collide = detectCollide(boky, villain);
+            loopVillains();
+            checkBokyLives();
+            checkBokyBonus();
+            loopScoreText();
+            loopObjectiveText();
+            //loopHeart();
+            loopLogo();
+
         }
 
         // ========== Répétition du défilement du background ==========
         function loopBackground() {
-             var numImages = Math.ceil(canvas.width / background.image.width) + 1;
-             var xpos = totalSeconds * background.motion % background.image.width;
+            var numImages = Math.ceil(canvas.width / background.image.width) + 1;
+            var xpos = totalSeconds * background.motion % background.image.width;
+            context.save();
+            context.translate(-xpos, 0);
+            for (var i = 0; i < numImages; i++) {
+                context.drawImage(background.image, i * background.image.width, 0);
+            }
+            context.restore();
+        }
 
-             context.save();
-             context.translate(-xpos, 0);
-             for (var i = 0; i < numImages; i++) {
-                 context.drawImage(background.image, i * background.image.width, 0);
-             }
-             context.restore();
+        function loopScoreText() {
+            context.font = '30px Arial';
+            if (boky.life === 0) {
+                context.font = '50px Arial';
+                context.fillText('GAME OVER', 400, 150);
+            } else {
+                context.fillText('Score : ' + boky.life, 500, 50);
+            }
+        }
+
+        function loopObjectiveText() {
+            context.font = '30px Arial';
+            if (boky.score === 9) {
+                context.font = '50px Arial';
+                context.fillText('YOU WIN', 400, 150);
+            } else {
+                context.fillText('Score : ' + boky.score + ' / 10', 900, 50);
+            }
         }
 
         // ========== Répétition de l'affichage de Boky ==========
         function loopBoky() {
-            context.drawImage(boky.image, boky.frame * boky.width, 0, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
-            boky.frame = (boky.frame + 1) % boky.attacking.numberOfFrames;
-            moveBoky();
+            if (boky.damaged > 0) {
+                context.drawImage(boky.image, boky.frame * boky.width, 381, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
+                boky.frame = (boky.frame + 1) % boky.hurt.numberOfFrames;
+                boky.damaged -= 1; // Permet l'affichage de l'état hurt de Boky pendant toute la collision
+            } else if (boky.bonusAnimation > 0) {
+                context.drawImage(boky.image, boky.frame * boky.width, 508, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
+                boky.frame = (boky.frame + 1) % boky.happy.numberOfFrames;
+                boky.bonusAnimation -= 1;
+                moveBoky();
+            } else {
+                context.drawImage(boky.image, boky.frame * boky.width, 762, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
+                boky.frame = (boky.frame + 1) % boky.walking.numberOfFrames;
+                moveBoky();
+            }
         }
 
         // ========== Répétition de l'affichage de Cody ==========
@@ -297,24 +478,33 @@
         }
 
         // ========== Répétition de l'affichage du villain ==========
-        function loopVillain() {
-            villainMoving();
-            context.drawImage(villain.image, villain.frame * villain.width, 0, villain.width, villain.height, villain.x, villain.y, villain.width, villain.height);
-            villain.frame = (villain.frame + 1) % villain.showing.numberOfFrames;
+        function loopVillains() {
+            for (var i = 0; i < Villain.untouched.length; i++) {
+                var villain = Villain.untouched[i];
+                context.drawImage(villain.image, villain.frame * Villain.width, 0, Villain.width, Villain.height, villain.x, villain.y, Villain.width, Villain.height);
+                villain.frame = (villain.frame + 1) % Villain.showing.numberOfFrames;
+                villainMoving(villain);
+            }
         }
 
-        // ========== Répétition de la musique du jeu ==========
-
-        function loopGameTheme() {
-            gameTheme.audio.play();
+        // ========== Répétition de l'affichage des logos ==========
+        function loopLogo() {
+            for (var i = 0; i < untouchedLogos.length; i++) {
+                var logo = untouchedLogos[i];
+                context.drawImage(logo.image, logo.frame * logo.width, 0, logo.width, logo.height, logo.x, logo.y, logo.width, logo.height);
+                logo.frame = (logo.frame + 1) % logo.numberOfFrames;
+                logoMoving(logo);
+            }
         }
 
         return {
             start: start,
             stop: stop,
+            toggleMuteTheme: toggleMuteTheme,
             load: loadGame
         }
-    }
+
+    } // << Fin de la fonction Game >>
 
     var canvas = document.getElementById('canvas');
     var bokyGame = Game(canvas);
@@ -324,101 +514,15 @@
 
     document.getElementById('btnStart').addEventListener('click', function() {
         bokyGame.start();
-        // gameTheme.audio.play();
     });
 
     document.getElementById('btnStop').addEventListener('click', function() {
         bokyGame.stop();
-        // gameTheme.audio.stop();
     });
 
-// ----------------------------------------------------------------------
-    // ========== Movements Boky ==========
-/*
-    var FPS = 60;
-    var movingInterval = -1;
-    var boky = document.getElementById('frame');
+    document.getElementById('btnMute').addEventListener('click', function() {
+        bokyGame.toggleMuteTheme();
+    });
 
-    function initBoky() {
-        boky.style.top = bokyStartTop + 'px';
-        boky.style.left = bokyStartLeft + 'px';
-    }
 
-    document.onkeydown = movementsBoky;
-
-    function movementsBoky(event) {
-        var direction;
-
-        var moveUp = function(element, step) {
-            var top = element.style.top;
-            element.style.top = parseFloat(top) - step + 'px';
-        };
-
-        var moveDown = function(element, step) {
-            var top = element.style.top;
-            element.style.top = parseFloat(top) + step + 'px';
-            //if (element === )
-        }
-
-        var moveRight = function(element, step) {
-            var left = element.style.left;
-            element.style.left = parseFloat(left) + step + 'px';
-        }
-
-        var moveLeft = function(element, step) {
-            var left = element.style.left;
-            element.style.left = parseFloat(left) - step + 'px';
-        };
-
-        switch(event.keyCode) {
-
-            case 38: // Up arrow key
-                direction = 'up';
-                break;
-
-            case 40: // Down arrow key
-                direction = 'down';
-                break;
-
-            case 37: // Left arrow key
-                direction = 'left';
-                break;
-
-            case 39: // Right arrow key
-                direction = 'right';
-                break;
-
-            default:
-
-        }
-
-        startMoving();
-
-        function startMoving() {
-            if(movingInterval === -1) {
-                // direction
-                var directionFunction;
-                //
-                if (direction === 'up') {
-                    directionFunction = moveUp;
-                } else if (direction === 'down') {
-                    directionFunction = moveDown;
-                } else if (direction === 'left') {
-                    directionFunction = moveLeft;
-                } else if (direction === 'right') {
-                    directionFunction = moveRight;
-                }
-
-                movingInterval = setInterval(directionFunction, 1000 / FPS, boky, stepBoky);
-            }
-        }
-
-    }
-
-    document.onkeyup = function stopMoving() {
-        clearInterval(movingInterval);
-        movingInterval = -1;
-    }
-    initBoky();
-*/
-}());
+}()); // << Fin de la main function >>

@@ -2,15 +2,23 @@
 -------------------------------------------------- */
 html {
   position: relative;
-  min-height: 100%;
+  /*min-height: 100%;*/
 }
 
 .footer {
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 60px;
+  height: 100px;
   background-color: #f5f5f5;
+}
+
+.social {
+  padding-top: 20px;
+}
+
+.social > a {
+  margin: 8px;
 }
 
 
@@ -40,9 +48,10 @@ body > .container {
 .btn-default,
 .btn-default:hover,
 .btn-default:focus {
-  color: #333;
-  background-color: #fff;
-  border: 1px solid #fff;
+  color: #0facf3;
+  border: 1px solid #0facf3;
+  width: 115px;
+  margin: 20px auto;
 }
 
 /*
@@ -52,12 +61,20 @@ body > .container {
 html,
 body {
   height: 100%;
-  background: #333;
+  background: #FFF;
 }
 body {
-  color: #fff;
+  color: #252422;
   text-align: center;
   /*text-shadow: 0 1px 3px rgba(0,0,0,.5);*/
+}
+
+h2.cover-heading, .backgroundImg-text {
+  color: #fff;
+}
+
+a {
+  color: #0facf3;
 }
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
@@ -97,25 +114,34 @@ body {
 * Canvas
 */
 
-#canvasWrapper {
-/*  position: relative;
-  width: 1140px;
-  margin-left: 235px;
-  margin-top: 50px;*/
-}
-
 #btnStart {
   display: inline-block;
 }
-/*#btnStop {
-  display: inline-block;
-}
-*/
+
 .gameBtn {
-  color: #333;
   margin: 20px 10px 0 10px;
   width: 75px;
 }
+
+/*
+* Accordeon
+*/
+
+h4.panel-title {
+  text-align: left;
+}
+
+.panel-body {
+  color: #333;
+}
+
+.panel-group {
+  margin-bottom: 0;
+}
+
+/*
+* Media Queries
+*/
 
 @media (min-width: 320px) {
   /* Start the vertical centering */
