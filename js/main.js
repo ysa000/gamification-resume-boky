@@ -50,6 +50,22 @@
             frame: 0,
             x: 200,
             y: 200,
+            step: 8,
+            flying: {
+                numberOfFrames: 4
+            },
+            hurt: {
+
+            }
+        };
+
+        var cody = {
+            src: './images/sprite/cody-sprite.png',
+            width: 122,
+            height: 96,
+            frame: 0,
+            x: 200,
+            y: 200,
             flyingUp: true,
             step: 8,
             flying: {
