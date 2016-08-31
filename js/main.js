@@ -506,9 +506,11 @@
 
         // ========== Affichage Game Over liés skills de Boky ==========
         function loopYouLostText() {
+            if (boky.score !== 10) {
                 context.font = '50px Arial';
                 context.fillText('YOU LOST', 450, 150);
                 context.fillText('You\'ve missed ' + (logoArray.length - boky.score) + ' skills', 200, 200);
+            }
         }
 
         // ========== Répétition de l'affichage de Boky ==========
