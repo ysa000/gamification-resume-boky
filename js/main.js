@@ -182,7 +182,7 @@
             loadBoky();
             loadControls();
             //loadCody();
-            //loadGameTheme();
+            loadGameTheme();
             //loadHeart();
         }
 
@@ -389,10 +389,10 @@
             var muteBtn = document.getElementById('btnMute');
             if (gameTheme.audio.muted === true) {
                 gameTheme.audio.muted = false;
-                muteBtn.innerHTML = 'Mute';
+                muteBtn.innerHTML = '<i class="fa fa-volume-off fa-lg" aria-hidden="true"></i> Mute';
             } else {
                 gameTheme.audio.muted = true;
-                muteBtn.innerHTML = 'Unmute';
+                muteBtn.innerHTML = '<i class="fa fa-volume-up fa-lg" aria-hidden="true"></i> Unmute';
             }
         }
 
