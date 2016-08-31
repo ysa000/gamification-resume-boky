@@ -181,7 +181,7 @@
             loadBackground();
             loadBoky();
             loadControls();
-            loadCody();
+            //loadCody();
             //loadGameTheme();
             //loadHeart();
         }
@@ -302,6 +302,11 @@
                 if(spawnCpt % 3 === 0 && spawnBonusCpt < logoArray.length) {
                     untouchedLogos.push(loadLogo(spawnBonusCpt));
                     spawnBonusCpt++;
+                    // Stop le jeu lorsque tous les logos ont été spawnés et qu'il y en ai au moins un de manqué
+                    if (spawnBonusCpt === logoArray.length) {
+                        setTimeout(bokyGame.stop, 3000);
+                        setTimeout(loopYouLostText, 3000);
+                    }
                 } else {
                     Villain.untouched.push(loadVillain());
                 }
@@ -345,20 +350,6 @@
         function logoMoving(logo) {
             logo.x -= logo.step;
         }
-
-        // ========== Détection de collisions ==========
-        // function detectCollide(obj1, obj2) {
-        //     if (obj1.x < obj2.x + obj2.width && // posX Boky < posX Villain + width Villain
-        //         obj1.x + obj1.width > obj2.x &&
-        //         obj1.y < obj2.y + obj2.height &&
-        //         obj1.height + obj1.y > obj2.y) {
-        //         // >>>>> Collision détectée
-        //         return true;
-        //     } else {
-        //         // >>>>> Pas de collision détectée
-        //         return false;
-        //     }
-        // }
 
         function detectCollide(obj1, obj2) {
             if (obj1.x < obj2.x && // posX Boky < posX Villain + width Villain
@@ -468,12 +459,13 @@
             spawnBonusAndVillains();
             loopBackground();
             loopBoky();
-            loopCody();
+            //loopCody();
             loopVillains();
             checkBokyLives();
             checkBokyBonus();
             loopScoreText();
             loopObjectiveText();
+            //loopYouLostText();
             //loopHeart();
             loopLogo();
 
@@ -491,23 +483,32 @@
             context.restore();
         }
 
+        // ========== Affichage Game Over liés points de vie de Boky ==========
         function loopScoreText() {
             context.font = '30px Arial';
             context.fillText('Life : ' + boky.life, 50, 50);
-            if (boky.life === 0) {
+            if (boky.life === 0 || bokyGame.stop == true) {
                 context.font = '50px Arial';
                 context.fillText('GAME OVER', 400, 150);
                 context.fillText('TRY AGAIN', 420, 200);
             }
         }
 
+        // ========== Affichage skills de Boky ==========
         function loopObjectiveText() {
             context.font = '30px Arial';
-                context.fillText('Compétences : ' + boky.score + ' / 10', 800, 50);
+                context.fillText('Skills : ' + boky.score + ' / 10', 800, 50);
             if (boky.score === 10) {
                 context.font = '50px Arial';
                 context.fillText('YOU WIN', 400, 150);
             }
+        }
+
+        // ========== Affichage Game Over liés skills de Boky ==========
+        function loopYouLostText() {
+                context.font = '50px Arial';
+                context.fillText('YOU LOST', 450, 150);
+                context.fillText('You\'ve missed ' + (logoArray.length - boky.score) + ' skills', 200, 200);
         }
 
         // ========== Répétition de l'affichage de Boky ==========
