@@ -48,8 +48,8 @@
             width: 89,
             height: 70,
             frame: 0,
-            x: 0,
-            y: 0,
+            x: 20,
+            y: 235,
             step: 15,
             attacking: {
                 numberOfFrames: 16
@@ -67,7 +67,7 @@
             damaged: 0,
             touchedVillains: [],
             touchedLogos: [],
-            life: 30,
+            life: 3,
             bonusAnimation: 0,
             score: 0
         };
@@ -405,7 +405,7 @@
                     boky.damaged = boky.hurt.numberOfFrames * 2;
                     var removedVillain = Villain.untouched.splice(i, 1);
                     boky.touchedVillains.push(removedVillain[0]);
-                    boky.life -= 10;
+                    boky.life -= 1;
                     if (boky.life <= 0) {
                         setTimeout(bokyGame.stop, 500);
                     }
@@ -486,7 +486,7 @@
         // ========== Affichage Game Over liés points de vie de Boky ==========
         function loopScoreText() {
             context.font = '30px Arial';
-            context.fillText('Life : ' + boky.life, 50, 50);
+            context.fillText('Life : ' + boky.life + ' / 3', 50, 50);
             if (boky.life === 0 || bokyGame.stop == true) {
                 context.font = '50px Arial';
                 context.fillText('GAME OVER', 400, 150);
@@ -509,7 +509,7 @@
             if (boky.score !== 10) {
                 context.font = '50px Arial';
                 context.fillText('YOU LOST', 450, 150);
-                context.fillText('You\'ve missed ' + (logoArray.length - boky.score) + ' skills', 200, 200);
+                context.fillText('You\'ve missed ' + (logoArray.length - boky.score) + ' skills', 350, 200);
             }
         }
 
