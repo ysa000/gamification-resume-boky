@@ -182,7 +182,7 @@
             loadBoky();
             loadControls();
             //loadCody();
-            loadGameTheme();
+            //loadGameTheme();
             //loadHeart();
         }
 
