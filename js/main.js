@@ -512,31 +512,33 @@
 
         // ========== Affichage Game Over liés points de vie de Boky ==========
         function loopScoreText() {
-            context.font = '30px Arial';
+            context.font = '40px Pacifico';
             context.fillText('Life : ' + boky.life + ' / 3', 50, 50);
             if (boky.life === 0) {
-                context.font = '50px Arial';
-                context.fillText('GAME OVER', 400, 150);
-                context.fillText('TRY AGAIN', 420, 200);
+                context.font = '60px Pacifico';
+                context.fillText('GAME OVER', 350, 250);
+                context.font = '40px Pacifico';
+                context.fillText('TRY AGAIN', 400, 300);
             }
         }
 
         // ========== Affichage skills de Boky ==========
         function loopObjectiveText() {
-            context.font = '30px Arial';
-                context.fillText('Skills : ' + boky.score + ' / 10', 800, 50);
+            context.font = '40px Pacifico';
+                context.fillText('Skills : ' + boky.score + ' / 10', 850, 50);
             if (boky.score === 10) {
-                context.font = '50px Arial';
-                context.fillText('YOU WIN', 400, 150);
+                context.font = '60px Pacifico';
+                context.fillText('YOU WIN', 400, 250);
             }
         }
 
         // ========== Affichage Game Over liés skills de Boky ==========
         function loopYouLostText() {
             if (boky.score !== 10) {
-                context.font = '50px Arial';
-                context.fillText('YOU LOST', 450, 150);
-                context.fillText('You\'ve missed ' + (logoArray.length - boky.score) + ' skills', 350, 200);
+                context.font = '60px Pacifico';
+                context.fillText('YOU  LOST', 400, 250);
+                context.font = '40px Pacifico';
+                context.fillText('You\'ve missed ' + (logoArray.length - boky.score) + ' skills', 400, 300);
             }
         }
 
