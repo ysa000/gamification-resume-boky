@@ -18,7 +18,6 @@
             motion: 300,
             groundSize: 70
         };
-
         // var boky = {
         //     src: './images/sprite/boky-sprite.png',
         //     width: 185,
@@ -187,11 +186,16 @@
             loadBoky();
             loadControls();
             loadCody();
-            //loadGameTheme();
-            //loadHeart();
+            loadGameTheme();
         }
 
         function deleteGame() {
+            stop();
+            background = null;
+            logoArray = null;
+            gameTheme = null;
+            boky = null;
+            cody = null;
             canvas = null;
             context = null;
         }
@@ -378,15 +382,14 @@
         function loadGameTheme() {
             gameTheme.audio = new Audio();
             gameTheme.audio.src = gameTheme.src;
-           gameTheme.audio.loop = gameTheme.loop;
-            if (gameTheme.playing) {
-                gameTheme.audio.play();
-            }
+            gameTheme.audio.loop = gameTheme.loop;
         }
 
         // ========== Lance le game theme ==========
         function playTheme() {
-            gameTheme.audio.play();
+            if (gameTheme.playing) {
+                gameTheme.audio.play();
+            }
         }
 
         // ========== Arrête le game theme ==========
@@ -446,26 +449,29 @@
             looping = true;
             lastFrameTime = Date.now();
             requestAnimationFrame(loop);
-            //playTheme();
+            playTheme();
         }
 
         // ========== Arrêt / Pause du jeu ==========
         function stop() {
             looping = false;
-            //stopTheme();
+            stopTheme();
         }
 
-        function playPause() {
+        // ========== Play/Pause du jeu
+        function togglePlayPause() {
             if (looping) {
                 looping = false;
-                //stopTheme();
+                stopTheme();
+                btnPlayPause.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i> Play';
             } else {
+                btnPlayPause.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i> Play';
                 looping = true;
                 loop();
-                // playTheme();
+                playTheme();
+                btnPlayPause.innerHTML = '<i class="fa fa-stop" aria-hidden="true"></i> Stop';
             }
         }
-
 
         // ========== Boucle les animations du jeu ==========
         function loop() {
@@ -488,7 +494,6 @@
             loopScoreText();
             loopObjectiveText();
             //loopYouLostText();
-            //loopHeart();
             loopLogo();
 
         }
@@ -584,10 +589,10 @@
         return {
             start: start,
             stop: stop,
+            togglePlayPause: togglePlayPause,
             toggleMuteTheme: toggleMuteTheme,
             load: loadGame,
-            deleteGame: deleteGame,
-            playPause: playPause
+            deleteGame: deleteGame
         }
 
     } // << Fin de la fonction Game >>
@@ -608,7 +613,12 @@
 
         cleanDom();
         loadGameHtml();
-        setTimeout(bokyGame.start, 500); // Temps de chargement du canvas
+        if (bokyGame.timeout) {
+            clearTimeout(bokyGame.timeout);
+        }
+        btnPlayPause.innerHTML = '<i class="fa fa-stop" aria-hidden="true"></i> Stop';
+
+        bokyGame.timeout = setTimeout(bokyGame.start, 50); // Temps de chargement du canvas
 
         function cleanDom() {
             while (displayCanvas.firstChild) {
@@ -619,12 +629,8 @@
 
     document.getElementById('btnRestart').addEventListener('click', restartGame);
 
-    document.getElementById('btnStart').addEventListener('click', function() {
-        bokyGame.start();
-    });
-
-    document.getElementById('btnStop').addEventListener('click', function() {
-        bokyGame.playPause();
+    document.getElementById('btnPlayPause').addEventListener('click', function() {
+        bokyGame.togglePlayPause();
     });
 
     document.getElementById('btnMute').addEventListener('click', function() {
