@@ -469,7 +469,7 @@
                 looping = true;
                 loop();
                 playTheme();
-                btnPlayPause.innerHTML = '<i class="fa fa-stop" aria-hidden="true"></i> Stop';
+                btnPlayPause.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i> Pause';
             }
         }
 
@@ -616,7 +616,7 @@
         if (bokyGame.timeout) {
             clearTimeout(bokyGame.timeout);
         }
-        btnPlayPause.innerHTML = '<i class="fa fa-stop" aria-hidden="true"></i> Stop';
+        btnPlayPause.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i> Pause';
         btnMute.innerHTML = '<i class="fa fa-volume-off fa-lg" aria-hidden="true"></i> Mute';
 
         bokyGame.timeout = setTimeout(bokyGame.start, 50); // Temps de chargement du canvas
