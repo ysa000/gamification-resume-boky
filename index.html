@@ -151,13 +151,15 @@
         <p class="lead">Le projet comprend l'intégration d'un jeu développé en HTML5 et JavaScript.</p>
         <p class="lead">Boky est un glaçon volant avec un gros marteau. Il est friendly et gourmand. Il évolue dans un univers montagnard, il a faim et aussi soif de connaissances. Lors de cette aventure, il pourra acquérir de nouvelles connaissances en collectant ce qu'il rencontrera sur sa route, mais gare aux têtes de mort, qu'il ne digère pas bien.</p>
         <p class="lead">Boky peut se déplacer en haut, en bas, avancer et reculer, en utilisant les flèches du clavier.</p>
-        <div id="displayCanvas"><!-- Canvas wrap-->
+
+        <div class="hide-canvas">
+          <div id="displayCanvas"></div>
+          <button id="btnRestart" class="btn btn-sm gameBtn"><i class="fa fa-refresh" aria-hidden="true"></i> Restart</button>
+          <button id="btnPlayPause" class="btn btn-sm gameBtn"><i class="fa fa-play" aria-hidden="true"></i> Play</button>
+          <button id="btnMute" class="btn btn-sm gameBtn"><i class="fa fa-volume-off fa-lg" aria-hidden="true"></i> Mute</button>
         </div>
-        <button id="btnRestart" class="btn btn-sm gameBtn"><i class="fa fa-refresh" aria-hidden="true"></i> Restart</button>
-        <button id="btnPlayPause" class="btn btn-sm gameBtn"><i class="fa fa-play" aria-hidden="true"></i> Play</button>
-        <button id="btnMute" class="btn btn-sm gameBtn"><i class="fa fa-volume-off fa-lg" aria-hidden="true"></i> Mute</button>
-        </div> <!-- /Canvas wrap -->
-        <div class="insteadCanvas">
+
+        <div class="instead-canvas">
           <img src="images/game-scrshot.png" alt="" />
           <br /><br />
           <p class="lead">A essayer sur desktop !</p>
