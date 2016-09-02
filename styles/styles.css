@@ -1,3 +1,34 @@
+@import 'https://fonts.googleapis.com/css?family=Lobster';
+
+/*
+ * Base structure
+ */
+
+html,
+body {
+  height: 100%;
+  background: #FFF;
+}
+body {
+  color: #616161;
+  text-align: center;
+  /*text-shadow: 0 1px 3px rgba(0,0,0,.5);*/
+}
+
+h2.cover-heading, .backgroundImg-text {
+  color: #fff;
+}
+
+a {
+  color: #0facf3;
+}
+
+.styley {
+  font-family: Lobster;
+  /*font-size: 50px;*/
+  color: #0FACF3;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -54,28 +85,7 @@ body > .container {
   margin: 20px auto;
 }
 
-/*
- * Base structure
- */
 
-html,
-body {
-  height: 100%;
-  background: #FFF;
-}
-body {
-  color: #252422;
-  text-align: center;
-  /*text-shadow: 0 1px 3px rgba(0,0,0,.5);*/
-}
-
-h2.cover-heading, .backgroundImg-text {
-  color: #fff;
-}
-
-a {
-  color: #0facf3;
-}
 
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
@@ -139,8 +149,11 @@ h4.panel-title {
 * Media Queries
 */
 
-@media (min-width: 320px) {
+@media (max-width: 768px) {
 
+  .menu-desktop {
+    display: none;
+  }
 }
 
 @media (min-width: 768px) {
@@ -150,6 +163,14 @@ h4.panel-title {
     margin-bottom: 20px;
     font-size: 21px;
     line-height: 1.4;
+  }
+
+  .menu-mobile {
+    display: none;
+  }
+
+  .menu-desktop {
+    display: inline;
   }
 
 }
