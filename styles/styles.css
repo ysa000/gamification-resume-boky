@@ -41,7 +41,7 @@ html {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 100px;
-  background-color: #f5f5f5;
+  background-color: #2F2F2F;
 }
 
 .social {
@@ -125,7 +125,7 @@ body > .container {
   width: 75px;
 }
 
-.insteadCanvas {
+.instead-canvas {
   display: none;
 }
 
@@ -182,15 +182,15 @@ h4.panel-title {
 
 @media (min-width: 320px) and (max-width: 1200px) {
 
-  .displayCanvas {
+  .hide-canvas {
     display: none;
   }
 
-  .insteadCanvas {
+  .instead-canvas {
     display: block;
   }
 
-  .insteadCanvas img {
+  .instead-canvas img {
     height: auto;
     width: 100%;
   }
