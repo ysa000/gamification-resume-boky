@@ -1,4 +1,7 @@
+@import 'https://fonts.googleapis.com/css?family=Lobster+Two:400,700';
 @import 'https://fonts.googleapis.com/css?family=Lobster';
+@import 'https://fonts.googleapis.com/css?family=Pacifico';
+
 
 /*
  * Base structure
@@ -29,6 +32,15 @@ a {
   color: #0FACF3;
 }
 
+/* Navbar
+-------------------------------------------------- */
+
+.navbar-brand {
+  /*font-family: 'Lobster Two', cursive;*/
+  /*font-size: 25px;*/
+}
+
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -41,7 +53,7 @@ html {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 100px;
-  background-color: #f5f5f5;
+  background-color: #2F2F2F;
 }
 
 .social {
@@ -72,7 +84,7 @@ body > .container {
 /* ------------------------------------------------------------------------- */
 
 /*
-* BACKGROUND COVER IMAGE
+* Site
 */
 
 /* Custom default button */
@@ -84,6 +96,8 @@ body > .container {
   width: 135px;
   margin: 20px auto;
 }
+
+
 
 
 
@@ -112,6 +126,11 @@ body > .container {
   height: 500px;
 }
 
+.btn-carousel {
+  background-color: #0facf3;
+  color: #fff;
+}
+
 /*
 * Canvas
 */
@@ -125,7 +144,7 @@ body > .container {
   width: 75px;
 }
 
-.insteadCanvas {
+.instead-canvas {
   display: none;
 }
 
@@ -182,15 +201,15 @@ h4.panel-title {
 
 @media (min-width: 320px) and (max-width: 1200px) {
 
-  .displayCanvas {
+  .hide-canvas {
     display: none;
   }
 
-  .insteadCanvas {
+  .instead-canvas {
     display: block;
   }
 
-  .insteadCanvas img {
+  .instead-canvas img {
     height: auto;
     width: 100%;
   }
