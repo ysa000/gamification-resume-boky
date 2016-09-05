@@ -163,6 +163,9 @@
             background.image = new Image();
             background.image.onload = function() {
                 loopBackground(0)
+            context.font = '40px Pacifico';
+            context.fillStyle = '#FF3300';
+            context.fillText('Click here or Play button to start', 290, 275);
             };
             background.image.src = background.src;
         }
@@ -479,6 +482,7 @@
                 context.font = '40px Pacifico';
                 context.fillStyle = '#FF3300';
                 context.fillText('Try again', 500, 300);
+                btnPlayPause.setAttribute('disabled', 'disabled');
             }
         }
 
@@ -573,8 +577,11 @@
 
     function loadGameHtml() {
         var canvas = document.createElement('canvas');
+        // var context = canvas.getContext('2d');
         displayCanvas.appendChild(canvas);
         bokyGame = Game(canvas);
+        // context.font = '40px Pacifico';
+        // context.fillText('Hello', 400, 300);
         bokyGame.load();
     }
 
@@ -618,5 +625,6 @@
     });
 
     loadGameHtml();
+
 
 }()); // << Fin de la main function >>
