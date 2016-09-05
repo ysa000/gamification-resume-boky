@@ -18,34 +18,6 @@
             motion: 300,
             groundSize: 70
         };
-        // var boky = {
-        //     src: './images/sprite/boky-sprite.png',
-        //     width: 185,
-        //     height: 127,
-        //     frame: 0,
-        //     x: 0,
-        //     y: 0,
-        //     step: 15,
-        //     attacking: {
-        //         numberOfFrames: 16
-        //     },
-        //     hurt: {
-        //         numberOfFrames: 16
-        //     },
-        //     happy: {
-        //         numberOfFrames: 24
-        //     },
-        //     walking: {
-        //         numberOfFrames: 16
-        //     },
-        //     direction: null,
-        //     damaged: 0,
-        //     touchedVillains: [],
-        //     touchedLogos: [],
-        //     life: 30,
-        //     bonusAnimation: 0,
-        //     score: 0
-        // };
 
         var boky = {
             src: './images/sprite/cody-sprite.png',
@@ -89,20 +61,6 @@
                 numberOfFrames: 16
             }
         };
-
-        // var cody = {
-        //     src: './images/sprite/cody-sprite.png',
-        //     width: 122,
-        //     height: 96,
-        //     frame: 0,
-        //     x: 200,
-        //     y: 200,
-        //     flyingUp: true,
-        //     step: 8,
-        //     flying: {
-        //         numberOfFrames: 4
-        //     }
-        // };
 
         var Villain = {
             src: './images/sprite/villain-sprite.png',
@@ -189,6 +147,7 @@
             loadGameTheme();
         }
 
+        // ========== Mise à 0 des éléments du canvas ==========
         function deleteGame() {
             stop();
             background = null;
@@ -366,8 +325,8 @@
         }
 
         function detectCollide(obj1, obj2) {
-            if (obj1.x < obj2.x &&
-                obj1.x + obj1.width > obj2.x + obj2.width &&
+            if (obj1.x < obj2.x + obj2.width &&
+                obj1.x + obj1.width > obj2.x &&
                 obj1.y < obj2.y + obj2.height &&
                 obj1.height + obj1.y > obj2.y) {
                 // >>>>> Collision détectée
@@ -436,9 +395,6 @@
                     var removedLogo = untouchedLogos.splice(i, 1);
                     boky.touchedLogos.push(removedLogo[0]);
                     boky.score += 1;
-                    // if (boky.score === 10) {
-                    //     setTimeout(bokyGame.stop, 500);
-                    // }
                 }
             }
         }
@@ -464,6 +420,8 @@
                 looping = false;
                 stopTheme();
                 btnPlayPause.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i> Play';
+                context.font = '40px Pacifico';
+                context.fillText('PAUSE', 500, 275);
             } else {
                 btnPlayPause.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i> Play';
                 looping = true;
@@ -493,7 +451,6 @@
             checkBokyBonus();
             loopScoreText();
             loopObjectiveText();
-            //loopYouLostText();
             loopLogo();
 
         }
@@ -516,9 +473,9 @@
             context.fillText('Life : ' + boky.life + ' / 3', 50, 50);
             if (boky.life === 0) {
                 context.font = '60px Pacifico';
-                context.fillText('GAME OVER', 350, 250);
+                context.fillText('Game Over', 425, 250);
                 context.font = '40px Pacifico';
-                context.fillText('TRY AGAIN', 400, 300);
+                context.fillText('Try again', 500, 300);
             }
         }
 
@@ -528,7 +485,7 @@
                 context.fillText('Skills : ' + boky.score + ' / 10', 850, 50);
             if (boky.score === 10) {
                 context.font = '60px Pacifico';
-                context.fillText('YOU WIN', 400, 250);
+                context.fillText('You win', 400, 250);
             }
         }
 
@@ -536,9 +493,9 @@
         function loopYouLostText() {
             if (boky.score !== 10) {
                 context.font = '60px Pacifico';
-                context.fillText('YOU  LOST', 400, 250);
+                context.fillText('You\'ve lost', 400, 250);
                 context.font = '40px Pacifico';
-                context.fillText('You\'ve missed ' + (logoArray.length - boky.score) + ' skills', 400, 300);
+                context.fillText('You missed ' + (logoArray.length - boky.score) + ' skills', 400, 300);
             }
         }
 
@@ -599,7 +556,6 @@
 
     } // << Fin de la fonction Game >>
 
-
     function loadGameHtml() {
         var canvas = document.createElement('canvas');
         displayCanvas.appendChild(canvas);
@@ -633,6 +589,10 @@
     document.getElementById('btnRestart').addEventListener('click', restartGame);
 
     document.getElementById('btnPlayPause').addEventListener('click', function() {
+        bokyGame.togglePlayPause();
+    });
+
+    document.getElementById('displayCanvas').addEventListener('click', function() {
         bokyGame.togglePlayPause();
     });
 
