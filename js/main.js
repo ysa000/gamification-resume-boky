@@ -163,7 +163,7 @@
             background.image = new Image();
             background.image.onload = function() {
                 loopBackground(0)
-            context.font = '40px Pacifico';
+            context.font = '40px Helvetica';
             context.fillStyle = '#FF3300';
             context.fillText('Click here or Play button to start', 290, 275);
             };
