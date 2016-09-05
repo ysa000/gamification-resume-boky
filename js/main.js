@@ -163,9 +163,9 @@
             background.image = new Image();
             background.image.onload = function() {
                 loopBackground(0)
-            context.font = '40px Helvetica';
+            context.font = '40px Lobster';
             context.fillStyle = '#FF3300';
-            context.fillText('Click here or Play button to start', 290, 275);
+            context.fillText('Click here or Play button to start', 310, 275);
             };
             background.image.src = background.src;
         }
