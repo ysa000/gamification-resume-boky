@@ -1,6 +1,7 @@
 (function() {
     var bokyGame;
     var displayCanvas = document.getElementById('displayCanvas');
+    var endGame = false;
 
     function Game(canvas) {
 
@@ -483,6 +484,7 @@
                 context.fillStyle = '#FF3300';
                 context.fillText('Try again', 500, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
+                return endGame = true;
             }
         }
 
@@ -496,8 +498,7 @@
                 context.fillStyle = '#FF3300';
                 context.fillText('YOU WIN', 450, 275);
                 btnPlayPause.setAttribute('disabled', 'disabled');
-
-
+                return endGame = true;
             }
         }
 
@@ -508,6 +509,8 @@
                 context.fillText('You\'ve lost', 400, 250);
                 context.font = '40px Pacifico';
                 context.fillText('You missed ' + (logoArray.length - boky.score) + ' skills', 400, 300);
+                btnPlayPause.setAttribute('disabled', 'disabled');
+                return endGame = true;
             }
         }
 
@@ -589,6 +592,7 @@
         if (bokyGame) {
             bokyGame.deleteGame();
             bokyGame = null;
+            endGame = false;
         }
 
         cleanDom();
@@ -613,11 +617,15 @@
     document.getElementById('btnRestart').addEventListener('click', restartGame);
 
     document.getElementById('btnPlayPause').addEventListener('click', function() {
+        if (endGame !== true) {
             bokyGame.togglePlayPause();
+        }
     });
 
     document.getElementById('displayCanvas').addEventListener('click', function() {
-        bokyGame.togglePlayPause();
+        if (endGame !== true) {
+            bokyGame.togglePlayPause();
+        }
     });
 
     document.getElementById('btnMute').addEventListener('click', function() {
