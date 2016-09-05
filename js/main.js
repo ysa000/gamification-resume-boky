@@ -1,6 +1,7 @@
 (function() {
     var bokyGame;
     var displayCanvas = document.getElementById('displayCanvas');
+    var endGame = false;
 
     function Game(canvas) {
 
@@ -19,9 +20,9 @@
         };
 
         var boky = {
-            src: './images/sprite/cody-sprite.png',
-            width: 89,
-            height: 70,
+            src: './images/sprite/boky-sprite.png',
+            width: 185,
+            height: 127,
             frame: 0,
             x: 20,
             y: 235,
@@ -35,9 +36,13 @@
             happy: {
                 numberOfFrames: 24
             },
-            flying: {
-                numberOfFrames: 4
+            walking: {
+                numberOfFrames: 16
             },
+            hitX: 16,
+            hitY: 18,
+            hitWidth: 185 - 16 - 58, // width - hitX - espace en trop
+            hitHeight: 127 - 18 - 3, // height - hitY - esp en trop
             direction: null,
             damaged: 0,
             touchedVillains: [],
@@ -48,16 +53,16 @@
         };
 
         var cody = {
-            src: './images/sprite/boky-sprite.png',
-            width: 185,
-            height: 127,
+            src: './images/sprite/cody-sprite.png',
+            width: 89,
+            height: 70,
             frame: 0,
             x: 955,
             y: 200,
             flyingUp: true,
             step: 8,
-            walking: {
-                numberOfFrames: 16
+            flying: {
+                numberOfFrames: 4
             }
         };
 
@@ -75,7 +80,7 @@
         };
 
         var gameTheme = {
-            src: './music/Xingu%20Loop.wav',
+            src: './sound/Xingu%20Loop.wav',
             playing: true,
             loop: true
         };
@@ -327,10 +332,10 @@
         }
 
         function detectCollide(obj1, obj2) {
-            if (obj1.x < obj2.x + obj2.width &&
-                obj1.x + obj1.width > obj2.x &&
-                obj1.y < obj2.y + obj2.height &&
-                obj1.height + obj1.y > obj2.y) {
+            if (obj1.x + obj1.hitX < obj2.x + obj2.width &&
+                obj1.x + obj1.hitX + obj1.hitWidth > obj2.x &&
+                obj1.y + obj1.hitY < obj2.y + obj2.height &&
+                obj1.hitHeight + obj1.y + obj1.hitY > obj2.y) {
                 // >>>>> Collision détectée
                 return true;
             } else {
@@ -456,6 +461,7 @@
             loopScoreText();
             loopObjectiveText();
             loopLogo();
+            activateCvBtn()
 
         }
 
@@ -476,13 +482,22 @@
             context.font = '40px Pacifico';
             context.fillText('Life : ' + boky.life + ' / 3', 50, 50);
             if (boky.life === 0) {
-                context.font = '60px Pacifico';
+                context.font = '60px Lobster';
                 context.fillStyle = '#FF3300';
                 context.fillText('Game Over', 425, 250);
-                context.font = '40px Pacifico';
+                context.font = '40px Lobster';
                 context.fillStyle = '#FF3300';
-                context.fillText('Try again', 500, 300);
+                context.fillText('Try again', 485, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
+                return endGame = true;
+            }
+        }
+
+        function activateCvBtn() {
+            var btnCv = document.getElementById('btnCv');
+            if (boky.score === 10 && endGame === true) {
+                btnCv.classList.remove('btn-cv-disabled').className('btn-cv-active');
+                btnCv.href = "cv_isabelle-yim.pdf";
             }
         }
 
@@ -492,22 +507,23 @@
             context.fillStyle = '#FF3300';
             context.fillText('Skills : ' + boky.score + ' / 10', 850, 50);
             if (boky.score === 10) {
-                context.font = '40px Pacifico';
+                context.font = '40px Lobster';
                 context.fillStyle = '#FF3300';
-                context.fillText('YOU WIN', 450, 275);
+                context.fillText('YOU WIN', 500, 275);
                 btnPlayPause.setAttribute('disabled', 'disabled');
-
-
+                return endGame = true;
             }
         }
 
         // ========== Affichage Game Over liés skills de Boky ==========
         function loopYouLostText() {
             if (boky.score !== 10) {
-                context.font = '60px Pacifico';
-                context.fillText('You\'ve lost', 400, 250);
-                context.font = '40px Pacifico';
+                context.font = '60px Lobster';
+                context.fillText('YOU\'VE LOST', 400, 250);
+                context.font = '40px Lobster';
                 context.fillText('You missed ' + (logoArray.length - boky.score) + ' skills', 400, 300);
+                btnPlayPause.setAttribute('disabled', 'disabled');
+                return endGame = true;
             }
         }
 
@@ -523,8 +539,8 @@
             //     boky.bonusAnimation -= 1;
             //     moveBoky();
             // } else {
-                context.drawImage(boky.image, boky.frame * boky.width, 0, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
-                boky.frame = (boky.frame + 1) % boky.flying.numberOfFrames;
+                context.drawImage(boky.image, boky.frame * boky.width, 762, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
+                boky.frame = (boky.frame + 1) % boky.walking.numberOfFrames;
                 moveBoky();
             // }
         }
@@ -534,7 +550,7 @@
             if(boky.score === 10) {
                 codyFlyingUpAndDown();
                 context.drawImage(cody.image, cody.frame * cody.width, 762, cody.width, cody.height, cody.x, cody.y, cody.width, cody.height);
-                cody.frame = (cody.frame + 1) % cody.walking.numberOfFrames;
+                cody.frame = (cody.frame + 1) % cody.flying.numberOfFrames;
             }
         }
         // ========== Répétition de l'affichage du villain ==========
@@ -589,6 +605,7 @@
         if (bokyGame) {
             bokyGame.deleteGame();
             bokyGame = null;
+            endGame = false;
         }
 
         cleanDom();
@@ -613,11 +630,15 @@
     document.getElementById('btnRestart').addEventListener('click', restartGame);
 
     document.getElementById('btnPlayPause').addEventListener('click', function() {
+        if (endGame !== true) {
             bokyGame.togglePlayPause();
+        }
     });
 
     document.getElementById('displayCanvas').addEventListener('click', function() {
-        bokyGame.togglePlayPause();
+        if (endGame !== true) {
+            bokyGame.togglePlayPause();
+        }
     });
 
     document.getElementById('btnMute').addEventListener('click', function() {
