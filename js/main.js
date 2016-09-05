@@ -25,7 +25,7 @@
             height: 127,
             frame: 0,
             x: 20,
-            y: 235,
+            y: 190,
             step: 15,
             attacking: {
                 numberOfFrames: 16
@@ -37,6 +37,9 @@
                 numberOfFrames: 24
             },
             walking: {
+                numberOfFrames: 16
+            },
+            dying: {
                 numberOfFrames: 16
             },
             hitX: 16,
@@ -386,7 +389,8 @@
                     boky.touchedVillains.push(removedVillain[0]);
                     boky.life -= 1;
                     if (boky.life <= 0) {
-                        setTimeout(bokyGame.stop, 500);
+                        setTimeout(bokyGame.stop, 1000);
+                        boky.life = 0;
                     }
                 }
             }
@@ -509,7 +513,8 @@
             if (boky.score === 10) {
                 context.font = '40px Lobster';
                 context.fillStyle = '#FF3300';
-                context.fillText('YOU WIN', 500, 275);
+                context.fillText('Congratulations', 450, 250);
+                context.fillText('You win', 500, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
                 return endGame = true;
             }
@@ -519,9 +524,9 @@
         function loopYouLostText() {
             if (boky.score !== 10) {
                 context.font = '60px Lobster';
-                context.fillText('YOU\'VE LOST', 400, 250);
+                context.fillText('You lost', 470, 250);
                 context.font = '40px Lobster';
-                context.fillText('You missed ' + (logoArray.length - boky.score) + ' skills', 400, 300);
+                context.fillText('You missed ' + (logoArray.length - boky.score) + ' skills', 420, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
                 return endGame = true;
             }
@@ -529,27 +534,30 @@
 
         // ========== Répétition de l'affichage de Boky ==========
         function loopBoky() {
-            // if (boky.damaged > 0) {
-            //     context.drawImage(boky.image, boky.frame * boky.width, 381, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
-            //     boky.frame = (boky.frame + 1) % boky.hurt.numberOfFrames;
-            //     boky.damaged -= 1; // Permet l'affichage de l'état hurt de Boky pendant toute la collision
-            // } else if (boky.bonusAnimation > 0) {
-            //     context.drawImage(boky.image, boky.frame * boky.width, 508, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
-            //     boky.frame = (boky.frame + 1) % boky.happy.numberOfFrames;
-            //     boky.bonusAnimation -= 1;
-            //     moveBoky();
-            // } else {
+            if (boky.damaged > 0) {
+                context.drawImage(boky.image, boky.frame * boky.width, 381, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
+                boky.frame = (boky.frame + 1) % boky.hurt.numberOfFrames;
+                boky.damaged -= 1; // Permet l'affichage de l'état hurt de Boky pendant toute la collision
+            } else if (boky.bonusAnimation > 0) {
+                context.drawImage(boky.image, boky.frame * boky.width, 508, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
+                boky.frame = (boky.frame + 1) % boky.happy.numberOfFrames;
+                boky.bonusAnimation -= 2;
+                moveBoky();
+            } else if (boky.life === 0) {
+                context.drawImage(boky.image, boky.frame * boky.width, 254, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
+                boky.frame = (boky.frame + 1) % boky.dying.numberOfFrames;
+            } else {
                 context.drawImage(boky.image, boky.frame * boky.width, 762, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
                 boky.frame = (boky.frame + 1) % boky.walking.numberOfFrames;
                 moveBoky();
-            // }
+            }
         }
 
         // ========== Répétition de l'affichage de Cody ==========
         function loopCody() {
             if(boky.score === 10) {
                 codyFlyingUpAndDown();
-                context.drawImage(cody.image, cody.frame * cody.width, 762, cody.width, cody.height, cody.x, cody.y, cody.width, cody.height);
+                context.drawImage(cody.image, cody.frame * cody.width, 0, cody.width, cody.height, cody.x, cody.y, cody.width, cody.height);
                 cody.frame = (cody.frame + 1) % cody.flying.numberOfFrames;
             }
         }
