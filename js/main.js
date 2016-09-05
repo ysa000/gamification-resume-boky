@@ -39,6 +39,10 @@
             walking: {
                 numberOfFrames: 16
             },
+            hitX: 16,
+            hitY: 18,
+            hitWidth: 185 - 16 - 58, // width - hitX - espace en trop
+            hitHeight: 127 - 18 - 3, // height - hitY - esp en trop
             direction: null,
             damaged: 0,
             touchedVillains: [],
@@ -328,10 +332,10 @@
         }
 
         function detectCollide(obj1, obj2) {
-            if (obj1.x < obj2.x + obj2.width &&
-                obj1.x + obj1.width > obj2.x &&
-                obj1.y < obj2.y + obj2.height &&
-                obj1.height + obj1.y > obj2.y) {
+            if (obj1.x + obj1.hitX < obj2.x + obj2.width &&
+                obj1.x + obj1.hitX + obj1.hitWidth > obj2.x &&
+                obj1.y + obj1.hitY < obj2.y + obj2.height &&
+                obj1.hitHeight + obj1.y + obj1.hitY > obj2.y) {
                 // >>>>> Collision détectée
                 return true;
             } else {
@@ -478,22 +482,21 @@
             context.font = '40px Pacifico';
             context.fillText('Life : ' + boky.life + ' / 3', 50, 50);
             if (boky.life === 0) {
-                context.font = '60px Pacifico';
+                context.font = '60px Lobster';
                 context.fillStyle = '#FF3300';
                 context.fillText('Game Over', 425, 250);
-                context.font = '40px Pacifico';
+                context.font = '40px Lobster';
                 context.fillStyle = '#FF3300';
-                context.fillText('Try again', 500, 300);
+                context.fillText('Try again', 485, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
                 return endGame = true;
             }
         }
 
         function activateCvBtn() {
+            var btnCv = document.getElementById('btnCv');
             if (boky.score === 10 && endGame === true) {
-                var btnCv = document.getElementById('btnCv');
-                btnCv.classList.remove('btn-cv-disabled');
-                // .className('btn-cv-active');
+                btnCv.classList.remove('btn-cv-disabled').className('btn-cv-active');
                 btnCv.href = "cv_isabelle-yim.pdf";
             }
         }
@@ -504,9 +507,9 @@
             context.fillStyle = '#FF3300';
             context.fillText('Skills : ' + boky.score + ' / 10', 850, 50);
             if (boky.score === 10) {
-                context.font = '40px Pacifico';
+                context.font = '40px Lobster';
                 context.fillStyle = '#FF3300';
-                context.fillText('YOU WIN', 450, 275);
+                context.fillText('YOU WIN', 500, 275);
                 btnPlayPause.setAttribute('disabled', 'disabled');
                 return endGame = true;
             }
@@ -515,9 +518,9 @@
         // ========== Affichage Game Over liés skills de Boky ==========
         function loopYouLostText() {
             if (boky.score !== 10) {
-                context.font = '60px Pacifico';
-                context.fillText('You\'ve lost', 400, 250);
-                context.font = '40px Pacifico';
+                context.font = '60px Lobster';
+                context.fillText('YOU\'VE LOST', 400, 250);
+                context.font = '40px Lobster';
                 context.fillText('You missed ' + (logoArray.length - boky.score) + ' skills', 400, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
                 return endGame = true;
