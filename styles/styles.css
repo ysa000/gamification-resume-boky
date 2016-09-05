@@ -78,30 +78,17 @@ body > .container {
 * Site
 */
 
-/* Custom default button */
-.btn-default,
-.btn-default:hover,
-.btn-default:focus {
-  color: #0facf3;
-  border: 1px solid #0facf3;
-  width: 135px;
-  margin: 20px auto;
+#btnCv {
+  -webkit-animation-duration: 3s;
+  -webkit-animation-delay: 2s;
+  -webkit-animation-iteration-count: infinite;
 }
 
 .btn-cv-disabled {
-  background-color: lightgrey;
-  color: #FFF;
-  width: 135px;
-  height: 50px;
-  margin: 20px auto;
-}
-
-.btn-cv-active {
   background-color: #0facf3;
   color: #FFF;
   width: 135px;
-  height: 50px;
-  margin: 20px auto;
+  margin: 60px auto 0;
 }
 
 /* CUSTOMIZE THE CAROUSEL

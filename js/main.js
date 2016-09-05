@@ -500,8 +500,10 @@
         function activateCvBtn() {
             var btnCv = document.getElementById('btnCv');
             if (boky.score === 10 && endGame === true) {
-                btnCv.classList.remove('btn-cv-disabled').className('btn-cv-active');
                 btnCv.href = "cv_isabelle-yim.pdf";
+                btnCv.classList.remove('bounce');
+                btnCv.classList.add('rollIn');
+                btnCv.innerHTML = 'Mon CV';
             }
         }
 
