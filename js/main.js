@@ -10,7 +10,6 @@
         canvas.width = 1140;
         canvas.height = 570;
 
-
         // ========== Config ==========
 
         var background = {
@@ -421,6 +420,8 @@
                 stopTheme();
                 btnPlayPause.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i> Play';
                 context.font = '40px Pacifico';
+                context.fillStyle = '#FF3300';
+                context.lineWidth = 3;
                 context.fillText('PAUSE', 500, 275);
             } else {
                 btnPlayPause.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i> Play';
@@ -473,8 +474,10 @@
             context.fillText('Life : ' + boky.life + ' / 3', 50, 50);
             if (boky.life === 0) {
                 context.font = '60px Pacifico';
+                context.fillStyle = '#FF3300';
                 context.fillText('Game Over', 425, 250);
                 context.font = '40px Pacifico';
+                context.fillStyle = '#FF3300';
                 context.fillText('Try again', 500, 300);
             }
         }
@@ -482,10 +485,15 @@
         // ========== Affichage skills de Boky ==========
         function loopObjectiveText() {
             context.font = '40px Pacifico';
-                context.fillText('Skills : ' + boky.score + ' / 10', 850, 50);
+            context.fillStyle = '#FF3300';
+            context.fillText('Skills : ' + boky.score + ' / 10', 850, 50);
             if (boky.score === 10) {
-                context.font = '60px Pacifico';
-                context.fillText('You win', 400, 250);
+                context.font = '40px Pacifico';
+                context.fillStyle = '#FF3300';
+                context.fillText('YOU WIN', 450, 275);
+                btnPlayPause.setAttribute('disabled', 'disabled');
+
+
             }
         }
 
@@ -545,6 +553,12 @@
             }
         }
 
+        function introGameText() {
+            context.font = '40px Pacifico';
+            context.fillStyle = '#FF3300';
+            context.fillText('HELLO', 500, 275);
+        }
+
         return {
             start: start,
             stop: stop,
@@ -553,6 +567,7 @@
             load: loadGame,
             deleteGame: deleteGame
         }
+
 
     } // << Fin de la fonction Game >>
 
@@ -574,6 +589,8 @@
         if (bokyGame.timeout) {
             clearTimeout(bokyGame.timeout);
         }
+
+        btnPlayPause.removeAttribute('disabled');
         btnPlayPause.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i> Pause';
         btnMute.innerHTML = '<i class="fa fa-volume-off fa-lg" aria-hidden="true"></i> Mute';
 
@@ -589,7 +606,7 @@
     document.getElementById('btnRestart').addEventListener('click', restartGame);
 
     document.getElementById('btnPlayPause').addEventListener('click', function() {
-        bokyGame.togglePlayPause();
+            bokyGame.togglePlayPause();
     });
 
     document.getElementById('displayCanvas').addEventListener('click', function() {
