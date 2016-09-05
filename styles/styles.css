@@ -88,9 +88,21 @@ body > .container {
   margin: 20px auto;
 }
 
+.btn-cv-disabled {
+  background-color: lightgrey;
+  color: #FFF;
+  width: 135px;
+  height: 50px;
+  margin: 20px auto;
+}
 
-
-
+.btn-cv-active {
+  background-color: #0facf3;
+  color: #FFF;
+  width: 135px;
+  height: 50px;
+  margin: 20px auto;
+}
 
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */

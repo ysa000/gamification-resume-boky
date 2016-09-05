@@ -20,9 +20,9 @@
         };
 
         var boky = {
-            src: './images/sprite/cody-sprite.png',
-            width: 89,
-            height: 70,
+            src: './images/sprite/boky-sprite.png',
+            width: 185,
+            height: 127,
             frame: 0,
             x: 20,
             y: 235,
@@ -36,8 +36,8 @@
             happy: {
                 numberOfFrames: 24
             },
-            flying: {
-                numberOfFrames: 4
+            walking: {
+                numberOfFrames: 16
             },
             direction: null,
             damaged: 0,
@@ -49,16 +49,16 @@
         };
 
         var cody = {
-            src: './images/sprite/boky-sprite.png',
-            width: 185,
-            height: 127,
+            src: './images/sprite/cody-sprite.png',
+            width: 89,
+            height: 70,
             frame: 0,
             x: 955,
             y: 200,
             flyingUp: true,
             step: 8,
-            walking: {
-                numberOfFrames: 16
+            flying: {
+                numberOfFrames: 4
             }
         };
 
@@ -76,7 +76,7 @@
         };
 
         var gameTheme = {
-            src: './music/Xingu%20Loop.wav',
+            src: './sound/Xingu%20Loop.wav',
             playing: true,
             loop: true
         };
@@ -457,6 +457,7 @@
             loopScoreText();
             loopObjectiveText();
             loopLogo();
+            activateCvBtn()
 
         }
 
@@ -485,6 +486,15 @@
                 context.fillText('Try again', 500, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
                 return endGame = true;
+            }
+        }
+
+        function activateCvBtn() {
+            if (boky.score === 10 && endGame === true) {
+                var btnCv = document.getElementById('btnCv');
+                btnCv.classList.remove('btn-cv-disabled');
+                // .className('btn-cv-active');
+                btnCv.href = "cv_isabelle-yim.pdf";
             }
         }
 
@@ -526,8 +536,8 @@
             //     boky.bonusAnimation -= 1;
             //     moveBoky();
             // } else {
-                context.drawImage(boky.image, boky.frame * boky.width, 0, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
-                boky.frame = (boky.frame + 1) % boky.flying.numberOfFrames;
+                context.drawImage(boky.image, boky.frame * boky.width, 762, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
+                boky.frame = (boky.frame + 1) % boky.walking.numberOfFrames;
                 moveBoky();
             // }
         }
@@ -537,7 +547,7 @@
             if(boky.score === 10) {
                 codyFlyingUpAndDown();
                 context.drawImage(cody.image, cody.frame * cody.width, 762, cody.width, cody.height, cody.x, cody.y, cody.width, cody.height);
-                cody.frame = (cody.frame + 1) % cody.walking.numberOfFrames;
+                cody.frame = (cody.frame + 1) % cody.flying.numberOfFrames;
             }
         }
         // ========== Répétition de l'affichage du villain ==========
