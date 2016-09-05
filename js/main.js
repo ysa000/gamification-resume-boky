@@ -226,7 +226,7 @@
                 }
             }
             function moveBokyDown() {
-                if (boky.y <= (canvas.height - (boky.height - boky.step + background.groundSize + 20))) { // 90px supp pour limiter la hauteur min de déplacement de Boky
+                if (boky.y <= (canvas.height - (boky.height - boky.step + background.groundSize + 20))) {
                     boky.y += boky.step;
                 }
             }

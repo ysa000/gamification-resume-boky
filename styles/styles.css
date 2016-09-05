@@ -1,7 +1,5 @@
-@import 'https://fonts.googleapis.com/css?family=Lobster+Two:400,700';
 @import 'https://fonts.googleapis.com/css?family=Lobster';
 @import 'https://fonts.googleapis.com/css?family=Pacifico';
-
 
 /*
  * Base structure
@@ -28,7 +26,6 @@ a {
 
 .styley {
   font-family: Lobster;
-  /*font-size: 50px;*/
   color: #0FACF3;
 }
 
@@ -58,7 +55,6 @@ html {
 .social > a {
   margin: 8px;
 }
-
 
 /* Custom page CSS
 -------------------------------------------------- */
@@ -156,7 +152,7 @@ h4.panel-title {
 }
 
 .panel-group {
-  margin-bottom: 0;
+  margin-bottom: 100px;
 }
 
 /*
