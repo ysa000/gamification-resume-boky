@@ -88,6 +88,11 @@
             loop: true
         };
 
+        var gameSounds = {
+            villainHit: new Audio ('./sound/monster.wav'),
+            logoHit: new Audio ('./sound/Auye1.ogg')
+        }
+
         // ========== Constructeur d'un objet type (logos) ==========
         function logo(name, src, width, height) {
             this.name = name;
@@ -369,11 +374,15 @@
         // ========== Mute/unmute le game theme ==========
         function toggleMuteTheme() {
             var muteBtn = document.getElementById('btnMute');
-            if (gameTheme.audio.muted === true) {
+            if (gameTheme.audio.muted === true && gameSounds.villainHit.muted && gameSounds.logoHit.muted) {
                 gameTheme.audio.muted = false;
+                gameSounds.villainHit.muted = false;
+                gameSounds.logoHit.muted = false;
                 muteBtn.innerHTML = '<i class="fa fa-volume-off fa-lg" aria-hidden="true"></i> Mute';
             } else {
                 gameTheme.audio.muted = true;
+                gameSounds.villainHit.muted = true;
+                gameSounds.logoHit.muted = true;
                 muteBtn.innerHTML = '<i class="fa fa-volume-up fa-lg" aria-hidden="true"></i> Unmute';
             }
         }
@@ -388,6 +397,7 @@
                     var removedVillain = Villain.untouched.splice(i, 1);
                     boky.touchedVillains.push(removedVillain[0]);
                     boky.life -= 1;
+                    gameSounds.villainHit.play();
                     if (boky.life <= 0) {
                         setTimeout(bokyGame.stop, 1000);
                         boky.life = 0;
@@ -406,6 +416,7 @@
                     var removedLogo = untouchedLogos.splice(i, 1);
                     boky.touchedLogos.push(removedLogo[0]);
                     boky.score += 1;
+                    gameSounds.logoHit.play();
                 }
             }
         }
