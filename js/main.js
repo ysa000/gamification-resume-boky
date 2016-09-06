@@ -89,8 +89,11 @@
         };
 
         var gameSounds = {
-            villainHit: new Audio ('./sound/monster.wav'),
-            logoHit: new Audio ('./sound/Auye1.ogg')
+            villainHit: new Audio ('./sound/uhoh.wav'),
+            logoHit: new Audio ('./sound/speech_rodent_3.wav'),
+            gameOver: new Audio ('./sound/oh-no.wav'),
+            youLost: new Audio ('./sound/gibberish.wav'),
+            happyEnd: new Audio ('./sound/chipmunk.wav')
         }
 
         // ========== Constructeur d'un objet type (logos) ==========
@@ -374,15 +377,26 @@
         // ========== Mute/unmute le game theme ==========
         function toggleMuteTheme() {
             var muteBtn = document.getElementById('btnMute');
-            if (gameTheme.audio.muted === true && gameSounds.villainHit.muted && gameSounds.logoHit.muted) {
+            if (gameTheme.audio.muted === true &&
+                gameSounds.villainHit.muted === true &&
+                gameSounds.logoHit.muted === true &&
+                gameSounds.gameOver.muted === true &&
+                gameSounds.happyEnd.muted === true &&
+                gameSounds.youLost.muted === true) {
                 gameTheme.audio.muted = false;
                 gameSounds.villainHit.muted = false;
                 gameSounds.logoHit.muted = false;
+                gameSounds.gameOver.muted = false;
+                gameSounds.happyEnd.muted = false;
+                gameSounds.youLost.muted = false;
                 muteBtn.innerHTML = '<i class="fa fa-volume-off fa-lg" aria-hidden="true"></i> Mute';
             } else {
                 gameTheme.audio.muted = true;
                 gameSounds.villainHit.muted = true;
                 gameSounds.logoHit.muted = true;
+                gameSounds.gameOver.muted = true;
+                gameSounds.happyEnd.muted = true;
+                gameSounds.youLost.muted = true;
                 muteBtn.innerHTML = '<i class="fa fa-volume-up fa-lg" aria-hidden="true"></i> Unmute';
             }
         }
@@ -505,6 +519,7 @@
                 context.fillText('Try again', 485, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
                 endGame = true;
+                gameSounds.gameOver.play();
             }
         }
 
@@ -530,6 +545,7 @@
                 context.fillText('You win', 500, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
                 endGame = true;
+                gameSounds.happyEnd.play();
             }
         }
 
@@ -542,6 +558,7 @@
                 context.fillText('You missed ' + (logoArray.length - boky.score) + ' skills', 420, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
                 endGame = true;
+                gameSounds.youLost.play();
             }
         }
 
