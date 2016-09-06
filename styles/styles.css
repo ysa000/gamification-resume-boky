@@ -1,3 +1,5 @@
+/* FONTS
+-------------------------------------------------- */
 @font-face {
   font-family: Lobster;
   src: url('../fonts/lobster_1.3-webfont.woff');
@@ -18,9 +20,12 @@
   src: url('../fonts/pacifico-webfont.woff');
 }
 
-/*
- * Base structure
- */
+/* BASE STRUCTURE
+-------------------------------------------------- */
+
+html {
+  position: relative;
+}
 
 html,
 body {
@@ -29,7 +34,6 @@ body {
   font-family: "Raleway Regular", "Helvetica Neue", Arial, sans-serif;
   color: #616161;
   text-align: center;
-  /*text-shadow: 0 1px 3px rgba(0,0,0,.5);*/
 }
 
 h2.cover-heading, .backgroundImg-text {
@@ -45,17 +49,12 @@ a {
   color: #0FACF3;
 }
 
-/* Sticky footer styles
+/* STICKY FOOTER
 -------------------------------------------------- */
-html {
-  position: relative;
-  /*min-height: 100%;*/
-}
 
 .footer {
   bottom: 0;
   width: 100%;
-  /* Set the fixed height of the footer here */
   height: 100px;
   background-color: #2F2F2F;
 }
@@ -68,9 +67,8 @@ html {
   margin: 8px;
 }
 
-/* Custom page CSS
+/* CUSTOM PAGE CSS
 -------------------------------------------------- */
-/* Not required for template or sticky footer method. */
 
 body > .container {
   padding: 60px 15px 0;
@@ -79,18 +77,8 @@ body > .container {
   margin: 20px 0;
 }
 
-.footer > .container {
-  padding-right: 15px;
-  padding-left: 15px;
-}
-
-/* ------------------------------------------------------------------------- */
-
-/*
-* Site
-*/
-
-#btnCv {
+.btn-animation-before {
+  opacity: 0.4;
   -webkit-animation-duration: 3s;
   -webkit-animation-delay: 2s;
   -webkit-animation-iteration-count: infinite;
@@ -100,6 +88,15 @@ body > .container {
   -ms-animation-duration: 3s;
   -ms-animation-delay: 2s;
   -ms-animation-iteration-count: infinite;
+}
+
+.btn-animation-after {
+  -webkit-animation-duration: 2s;
+  -webkit-animation-delay: 1s;
+  -moz-animation-duration: 2s;
+  -moz-animation-delay: 1s;
+  -ms-animation-duration: 2s;
+  -ms-animation-delay: 1s;
 }
 
 .btn-cv-disabled {
@@ -112,7 +109,6 @@ body > .container {
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
 
-/* Carousel base class */
 .carousel {
   height: 500px;
 }
@@ -159,14 +155,17 @@ body > .container {
   color: #fff;
 }
 
+h1.styley {
+  font-size: 50px;
+}
+
 .carousel-text {
   font-family: "Raleway SemiBold", "Helvetica Neue", Arial, sans-serif;
   text-shadow: 0 1px 3px rgba(0,0,0,.5);
 }
 
-/*
-* Canvas
-*/
+/* CANVAS
+-------------------------------------------------- */
 
 #btnStart {
   display: inline-block;
@@ -181,9 +180,8 @@ body > .container {
   display: none;
 }
 
-/*
-* Accordeon
-*/
+/* ACCORDION
+-------------------------------------------------- */
 
 h4.panel-title {
   text-align: left;
@@ -197,15 +195,15 @@ h4.panel-title {
   margin-bottom: 100px;
 }
 
-/*
-* Media Queries
-*/
+/* MEDIA QUERIES
+-------------------------------------------------- */
 
 @media (max-width: 768px) {
 
   .menu-desktop {
     display: none;
   }
+
 }
 
 @media (min-width: 768px) {
@@ -227,11 +225,6 @@ h4.panel-title {
 
 }
 
-@media (min-width: 992px) {
-
-
-}
-
 @media (min-width: 320px) and (max-width: 1200px) {
 
   .hide-canvas {
@@ -248,4 +241,3 @@ h4.panel-title {
   }
 
 }
-
