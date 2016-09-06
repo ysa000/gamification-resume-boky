@@ -1,5 +1,22 @@
-@import 'https://fonts.googleapis.com/css?family=Lobster';
-@import 'https://fonts.googleapis.com/css?family=Pacifico';
+@font-face {
+  font-family: Lobster;
+  src: url('../fonts/lobster_1.3-webfont.woff');
+}
+
+@font-face {
+  font-family: Raleway Regular;
+  src: url('../fonts/raleway-regular-webfont.woff');
+}
+
+@font-face {
+  font-family: Raleway SemiBold;
+  src: url('../fonts/raleway-semibold-webfont.woff');
+}
+
+@font-face {
+  font-family: Pacifico;
+  src: url('../fonts/pacifico-webfont.woff');
+}
 
 /*
  * Base structure
@@ -9,8 +26,7 @@ html,
 body {
   height: 100%;
   background: #FFF;
-}
-body {
+  font-family: "Raleway Regular", "Helvetica Neue", Arial, sans-serif;
   color: #616161;
   text-align: center;
   /*text-shadow: 0 1px 3px rgba(0,0,0,.5);*/
@@ -28,10 +44,6 @@ a {
   font-family: Lobster;
   color: #0FACF3;
 }
-
-/* Navbar
--------------------------------------------------- */
-
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -142,10 +154,14 @@ body > .container {
   background-size: cover;
 }
 
-
 .btn-carousel {
   background-color: #0facf3;
   color: #fff;
+}
+
+.carousel-text {
+  font-family: "Raleway SemiBold", "Helvetica Neue", Arial, sans-serif;
+  text-shadow: 0 1px 3px rgba(0,0,0,.5);
 }
 
 /*
