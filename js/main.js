@@ -178,7 +178,7 @@
                 loopBackground(0)
             context.font = '40px Lobster';
             context.fillStyle = '#FF3300';
-            context.fillText('Click here or Play button to start', 310, 275);
+            context.fillText('Click here or Play to start', 360, 275);
             };
             background.image.src = background.src;
         }
@@ -512,8 +512,8 @@
             var btnCv = document.getElementById('btnCv');
             if (boky.score === 10 && endGame === true) {
                 btnCv.href = "cv_isabelle-yim.pdf";
-                btnCv.classList.remove('bounce');
-                btnCv.classList.add('rollIn');
+                btnCv.classList.remove('bounce', 'btn-animation-before');
+                btnCv.classList.add('rollIn', 'btn-animation-after');
                 btnCv.innerHTML = 'Mon CV';
             }
         }
