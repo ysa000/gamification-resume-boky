@@ -90,7 +90,7 @@
 
         var gameSounds = {
             villainHit: new Audio('./sound/monster.wav'),
-            logoHit: new Audio('./sound/speech_rodent_3.flac')
+            logoHit: new Audio('./sound/Auye1.ogg')
         }
 
         // ========== Constructeur d'un objet type (logos) ==========
@@ -412,6 +412,7 @@
                     var removedLogo = untouchedLogos.splice(i, 1);
                     boky.touchedLogos.push(removedLogo[0]);
                     boky.score += 1;
+                    gameSounds.logoHit.play();
                 }
             }
         }
