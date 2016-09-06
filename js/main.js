@@ -493,7 +493,7 @@
                 context.fillStyle = '#FF3300';
                 context.fillText('Try again', 485, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
-                return endGame = true;
+                endGame = true;
             }
         }
 
@@ -518,7 +518,7 @@
                 context.fillText('Congratulations', 450, 250);
                 context.fillText('You win', 500, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
-                return endGame = true;
+                endGame = true;
             }
         }
 
@@ -530,7 +530,7 @@
                 context.font = '40px Lobster';
                 context.fillText('You missed ' + (logoArray.length - boky.score) + ' skills', 420, 300);
                 btnPlayPause.setAttribute('disabled', 'disabled');
-                return endGame = true;
+                endGame = true;
             }
         }
 
@@ -543,7 +543,7 @@
             } else if (boky.bonusAnimation > 0) {
                 context.drawImage(boky.image, boky.frame * boky.width, 508, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
                 boky.frame = (boky.frame + 1) % boky.happy.numberOfFrames;
-                boky.bonusAnimation -= 2;
+                boky.bonusAnimation -= 0.5;
                 moveBoky();
             } else if (boky.life === 0) {
                 context.drawImage(boky.image, boky.frame * boky.width, 254, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
@@ -563,6 +563,7 @@
                 cody.frame = (cody.frame + 1) % cody.flying.numberOfFrames;
             }
         }
+
         // ========== Répétition de l'affichage du villain ==========
         function loopVillains() {
             for (var i = 0; i < Villain.untouched.length; i++) {
@@ -603,11 +604,8 @@
 
     function loadGameHtml() {
         var canvas = document.createElement('canvas');
-        // var context = canvas.getContext('2d');
         displayCanvas.appendChild(canvas);
         bokyGame = Game(canvas);
-        // context.font = '40px Pacifico';
-        // context.fillText('Hello', 400, 300);
         bokyGame.load();
     }
 

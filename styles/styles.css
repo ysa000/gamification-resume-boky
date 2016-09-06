@@ -114,13 +114,35 @@ body > .container {
   height: 500px;
   background-color: #777;
 }
-.carousel-inner > .item > img {
+
+.carousel-inner > .item > img.first-slide {
+  background: url("../images/pexels-photo-60626-1280x500.jpeg") no-repeat center;
+}
+
+.carousel-inner > .item > img.second-slide {
+  background: url("../images/featured-post-image.jpg") no-repeat center;
+}
+
+.carousel-inner > .item > img.third-slide {
+  background: url("../images/person-woman-apple-hotel-1280x500.jpg") no-repeat center;
+}
+
+.carousel-inner > .item > img.first-slide,
+.carousel-inner > .item > img.second-slide,
+.carousel-inner > .item > img.third-slide {
   position: absolute;
   top: 0;
   left: 0;
-  min-width: 100%;
+  width: 100%;
   height: 500px;
+  opacity: 0.5;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
+
+
 
 .btn-carousel {
   background-color: #0facf3;
