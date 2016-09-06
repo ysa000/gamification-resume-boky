@@ -88,6 +88,11 @@
             loop: true
         };
 
+        var gameSounds = {
+            villainHit: new Audio('./sound/monster.wav'),
+            logoHit: new Audio('./sound/speech_rodent_3.flac')
+        }
+
         // ========== Constructeur d'un objet type (logos) ==========
         function logo(name, src, width, height) {
             this.name = name;
@@ -388,6 +393,7 @@
                     var removedVillain = Villain.untouched.splice(i, 1);
                     boky.touchedVillains.push(removedVillain[0]);
                     boky.life -= 1;
+                    gameSounds.villainHit.play();
                     if (boky.life <= 0) {
                         setTimeout(bokyGame.stop, 1000);
                         boky.life = 0;
