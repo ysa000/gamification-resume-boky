@@ -27,14 +27,11 @@
             x: 20,
             y: 190,
             step: 15,
-            attacking: {
+            happy: {
                 numberOfFrames: 16
             },
             hurt: {
                 numberOfFrames: 16
-            },
-            happy: {
-                numberOfFrames: 24
             },
             walking: {
                 numberOfFrames: 16
@@ -93,7 +90,7 @@
             logoHit: new Audio ('./sound/speech_rodent_3.wav'),
             gameOver: new Audio ('./sound/oh-no.wav'),
             youLost: new Audio ('./sound/gibberish.wav'),
-            happyEnd: new Audio ('./sound/chipmunk.wav')
+            happyEnd: new Audio ('./sound/ohyeah.ogg')
         }
 
         // ========== Constructeur d'un objet type (logos) ==========
@@ -293,10 +290,10 @@
                 if(spawnCpt % 3 === 0 && spawnBonusCpt < logoArray.length) {
                     untouchedLogos.push(loadLogo(spawnBonusCpt));
                     spawnBonusCpt++;
-                    // Stop le jeu lorsque tous les logos ont été spawnés et qu'il y en ai au moins un de manqué
+                    // Stoppe le jeu lorsque tous les logos ont été spawnés et qu'il y en ait au moins un de manqué
                     if (spawnBonusCpt === logoArray.length) {
-                        setTimeout(bokyGame.stop, 3000);
-                        setTimeout(loopYouLostText, 3000);
+                        setTimeout(bokyGame.stop, 4000);
+                        boky.lostTimeOut = setTimeout(loopYouLostText, 4000);
                     }
                 } else {
                     Villain.untouched.push(loadVillain());
@@ -511,6 +508,7 @@
             context.font = '40px Pacifico';
             context.fillText('Life : ' + boky.life + ' / 3', 50, 50);
             if (boky.life === 0) {
+                clearTimeout(boky.lostTimeOut);
                 context.font = '60px Lobster';
                 context.fillStyle = '#FF3300';
                 context.fillText('Game Over', 425, 250);
@@ -569,9 +567,9 @@
                 boky.frame = (boky.frame + 1) % boky.hurt.numberOfFrames;
                 boky.damaged -= 1; // Permet l'affichage de l'état hurt de Boky pendant toute la collision
             } else if (boky.bonusAnimation > 0) {
-                context.drawImage(boky.image, boky.frame * boky.width, 508, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
+                context.drawImage(boky.image, boky.frame * boky.width, 0, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
                 boky.frame = (boky.frame + 1) % boky.happy.numberOfFrames;
-                boky.bonusAnimation -= 0.5;
+                boky.bonusAnimation -= 1.1;
                 moveBoky();
             } else if (boky.life === 0) {
                 context.drawImage(boky.image, boky.frame * boky.width, 254, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
@@ -594,6 +592,7 @@
 
         // ========== Répétition de l'affichage du villain ==========
         function loopVillains() {
+            if (boky.score === 10) return;
             for (var i = 0; i < Villain.untouched.length; i++) {
                 var villain = Villain.untouched[i];
                 context.drawImage(villain.image, villain.frame * Villain.width, 0, Villain.width, Villain.height, villain.x, villain.y, Villain.width, Villain.height);
