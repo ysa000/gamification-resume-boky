@@ -185,10 +185,12 @@ h1.styley {
 
 h4.panel-title {
   text-align: left;
+  font-size: 21px;
 }
 
 .panel-body {
   color: #333;
+  font-size: 18px;
 }
 
 .panel-group {
@@ -202,6 +204,14 @@ h4.panel-title {
 
   .menu-desktop {
     display: none;
+  }
+
+  h4.panel-title {
+    font-size: 16px;
+  }
+
+  .panel-body {
+    font-size: 14px;
   }
 
 }
