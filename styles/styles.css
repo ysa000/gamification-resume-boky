@@ -123,21 +123,21 @@ body > .container {
   background-color: #777;
 }
 
-.carousel-inner > .item > img.first-slide {
+.carousel-inner > .item > div.first-slide {
   background: url("../images/pexels-photo-60626-1280x500.jpeg") no-repeat center;
 }
 
-.carousel-inner > .item > img.second-slide {
+.carousel-inner > .item > div.second-slide {
   background: url("../images/featured-post-image.jpg") no-repeat center;
 }
 
-.carousel-inner > .item > img.third-slide {
+.carousel-inner > .item > div.third-slide {
   background: url("../images/person-woman-apple-hotel-1280x500.jpg") no-repeat center;
 }
 
-.carousel-inner > .item > img.first-slide,
-.carousel-inner > .item > img.second-slide,
-.carousel-inner > .item > img.third-slide {
+.carousel-inner > .item > div.first-slide,
+.carousel-inner > .item > div.second-slide,
+.carousel-inner > .item > div.third-slide {
   position: absolute;
   top: 0;
   left: 0;
