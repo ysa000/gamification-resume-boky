@@ -527,6 +527,10 @@
                 btnCv.href = "cv_isabelle-yim.pdf";
                 btnCv.classList.remove('bounce', 'btn-animation-before');
                 btnCv.classList.add('rollIn', 'btn-animation-after');
+                setTimeout(function() {
+                    btnCv.classList.remove('rollIn');
+                    btnCv.classList.add('tada');
+                }, 3000);
                 btnCv.innerHTML = 'Mon CV';
             }
         }
@@ -565,7 +569,7 @@
             if (boky.damaged > 0) {
                 context.drawImage(boky.image, boky.frame * boky.width, 381, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
                 boky.frame = (boky.frame + 1) % boky.hurt.numberOfFrames;
-                boky.damaged -= 1; // Permet l'affichage de l'état hurt de Boky pendant toute la collision
+                boky.damaged -= 1; // Permet l'affichage de l'état appelé de Boky pendant toute la collision
             } else if (boky.bonusAnimation > 0) {
                 context.drawImage(boky.image, boky.frame * boky.width, 0, boky.width, boky.height, boky.x, boky.y, boky.width, boky.height);
                 boky.frame = (boky.frame + 1) % boky.happy.numberOfFrames;
@@ -609,12 +613,6 @@
                 logo.frame = (logo.frame + 1) % logo.numberOfFrames;
                 logoMoving(logo);
             }
-        }
-
-        function introGameText() {
-            context.font = '40px Pacifico';
-            context.fillStyle = '#FF3300';
-            context.fillText('HELLO', 500, 275);
         }
 
         return {
@@ -681,6 +679,5 @@
     });
 
     loadGameHtml();
-
 
 }()); // << Fin de la main function >>
